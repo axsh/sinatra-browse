@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = s.summary
   s.authors     = ['Axsh Co. LTD']
   s.email       = 'dev@axsh.net'
-  s.files       = ['lib/sinatra/browse.rb']
+  s.files       = Dir.glob("{lib}/**/*") + %w(LICENSE README.md)
   s.homepage    = 'https://github.com/axsh/sinatra-browse'
   s.license     = 'LGPLv3'
 end

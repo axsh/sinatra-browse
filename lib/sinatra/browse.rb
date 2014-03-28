@@ -2,36 +2,9 @@
 
 require 'sinatra/base'
 
+Dir["#{File.dirname(__FILE__)}/browse/*.rb"].each {|f| require f }
+
 module Sinatra::Browse
-  class Route
-    attr_accessor :parameters
-    attr_accessor :name
-    attr_accessor :match
-
-    def self.build_name(request_method, path_info)
-      "#{request_method}__#{path_info}"
-    end
-
-    def initialize(request_method, path_info, parameters = nil)
-      @name = build_name(request_method, path_info)
-      @match = build_match(request_method, path_info)
-      @parameters = parameters || {}
-    end
-
-    def matches?(request_method, path_info)
-      !! (build_name(request_method,path_info) =~ @match)
-    end
-
-    private
-    def build_name(request_method, path_info)
-      self.class.build_name(request_method, path_info)
-    end
-
-    def build_match(request_method, path_info)
-      /^#{request_method}__#{path_info.gsub(/:[^\/]*/, '[^\/]*')}$/
-    end
-  end
-
   def param(name, type, options = {})
     temp_params[name] = options.merge({ type: type })
   end
