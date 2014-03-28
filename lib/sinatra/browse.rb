@@ -59,4 +59,4 @@ module Sinatra::Browse
   end
 end
 
-module Sinatra; register(Doc) end
+module Sinatra; register(Browse) end
