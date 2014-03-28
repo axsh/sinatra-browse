@@ -20,11 +20,15 @@ module Sinatra::Browse
   end
 
   def route_params_for(request_method, path_info)
-    route_params["#{request_method}__#{path_info}"]
+    route_params.values.find { |v| !("#{request_method}__#{path_info}" =~ v[:match]).nil? }
   end
 
   def set_route_params_for(request_method, path_info, new_params = @temp_params)
-    route_params["#{request_method}__#{path_info}"] = new_params
+    name = "#{request_method}__#{path_info}"
+    route_params[name] = new_params.merge({
+      match: /^#{request_method}__#{path_info.gsub(/:[^\/]*/, '[^\/]*')}$/,
+      name: name
+    })
   end
 
   def self.registered(app)
@@ -36,7 +40,7 @@ module Sinatra::Browse
       path = request.path_info
       reqm = request.request_method
       app.route_params_for(reqm, path)
-      params.delete_if { |i| !route_params_for(reqm, path).member?(i) }
+      params.delete_if { |i| !app.route_params_for(reqm, path).member?(i) }
 
       # Create the (future) browsable api
       app.get '/browse' do
