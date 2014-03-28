@@ -2,19 +2,21 @@
 
  module Sinatra::Browse
   class Route
-    attr_accessor :parameters
-    attr_accessor :name
-    attr_accessor :match
+    attr_reader :parameters
+    attr_reader :name
+    attr_reader :match
+    attr_reader :description
 
     # This is here because we're using the name as the keys for the
     # _browse_routes hash. We want to build it outside of this class for that.
     def self.build_name(request_method, path_info)
-      "#{request_method}__#{path_info}"
+      "#{request_method}  #{path_info}"
     end
 
-    def initialize(request_method, path_info, parameters = nil)
+    def initialize(request_method, path_info, description, parameters = nil)
       @name = build_name(request_method, path_info)
       @match = build_match(request_method, path_info)
+      @description = description
       @parameters = parameters || {}
     end
 
@@ -28,7 +30,7 @@
     end
 
     def build_match(request_method, path_info)
-      /^#{request_method}__#{path_info.gsub(/:[^\/]*/, '[^\/]*')}$/
+      /^#{request_method}\s\s#{path_info.gsub(/:[^\/]*/, '[^\/]*')}$/
     end
   end
 end
