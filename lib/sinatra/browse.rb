@@ -48,6 +48,7 @@ module Sinatra::Browse
         app.route_params.each { |key, value|
           output += "<h1>#{key}</h1>"
           value.each { |param_key, param_value|
+            next if param_key == :match || param_key == :name
             output += "<p>#{param_key} #{param_value[:type]}</p>"
           }
         }
