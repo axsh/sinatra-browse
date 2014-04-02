@@ -11,4 +11,10 @@ describe "parameter" do
     expect(body.member?('b')).to eq true
     expect(body.member?('c')).to eq false
   end
+
+  # This is just a regression test for now
+  it "doesn't crash when calling a route that wasn't defined" do
+    get("i_dont_exist")
+    expect(last_response.errors).to be_empty
+  end
 end
