@@ -9,4 +9,6 @@ def app; App end
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods
+  config.formatter = :documentation
+  config.color_enabled = true
 end

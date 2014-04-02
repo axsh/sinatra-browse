@@ -33,4 +33,20 @@ describe "sinatra-browse" do
     expect(body['boolean']).to be_a(FalseClass)
     expect(body['float']).to be_a(Float)
   end
+
+  describe "Boolean coercion" do
+    ["y", "yes", "t", "true", "1"].each do |i|
+      it "returns true for '#{i}'" do
+        get("features/type_coercion", boolean: i)
+        expect(body['boolean']).to be_a(TrueClass)
+      end
+    end
+
+    ["n", "no", "f", "false", "0"].each do |i|
+      it "returns false for '#{i}'" do
+        get("features/type_coercion", boolean: i)
+        expect(body['boolean']).to be_a(FalseClass)
+      end
+    end
+  end
 end
