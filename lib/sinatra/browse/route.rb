@@ -24,6 +24,10 @@
       !! (build_name(request_method,path_info) =~ @match)
     end
 
+    def has_parameter?(parameter)
+      @parameters.has_key?(parameter.to_sym)
+    end
+
     private
     def build_name(request_method, path_info)
       self.class.build_name(request_method, path_info)

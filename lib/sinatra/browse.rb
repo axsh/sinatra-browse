@@ -35,7 +35,7 @@ module Sinatra::Browse
   end
 
   #TODO: Rename method... It doesn't sound like we'd be creating a new route object here
-  def set_browse_routes_for(request_method, path_info, description = browse_description , new_params = temp_browse_params)
+  def set_browse_routes_for(request_method, path_info, description = browse_description, new_params = temp_browse_params)
     new_route = Route.new(request_method, path_info, browse_description, new_params)
     browse_routes[new_route.name] = new_route
   end
@@ -48,8 +48,8 @@ module Sinatra::Browse
       #TODO: Make this optional per route and global
       path = request.path_info
       reqm = request.request_method
-      app.browse_routes_for(reqm, path)
-      params.delete_if { |i| !app.browse_routes_for(reqm, path).member?(i) }
+      #TODO: Make sure it doesn't crash when calling a route that wasn't defined
+      params.delete_if { |i| !app.browse_routes_for(reqm, path).has_parameter?(i) }
     end
 
     # Create the (future) browsable api
