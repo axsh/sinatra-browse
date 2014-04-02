@@ -28,7 +28,27 @@
       @parameters.has_key?(parameter.to_sym)
     end
 
+    def coerce_type(params)
+      @parameters.each { |k,v|
+        params[k] &&= case v[:type]
+        when :Boolean
+          cast_to_boolean(params[k])
+        else
+          send(v[:type], params[k])
+        end
+      }
+    end
+
     private
+    def cast_to_boolean(param)
+      case param
+      when "y", "yes", "t", "true", "1"
+        true
+      when "n", "no", "f", "false", "0"
+        false
+      end
+    end
+
     def build_name(request_method, path_info)
       self.class.build_name(request_method, path_info)
     end

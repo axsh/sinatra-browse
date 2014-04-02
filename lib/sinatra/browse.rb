@@ -50,6 +50,8 @@ module Sinatra::Browse
       reqm = request.request_method
       #TODO: Make sure it doesn't crash when calling a route that wasn't defined
       params.delete_if { |i| !app.browse_routes_for(reqm, path).has_parameter?(i) }
+
+      app.browse_routes_for(reqm, path).coerce_type(params)
     end
 
     # Create the (future) browsable api

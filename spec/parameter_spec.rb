@@ -20,21 +20,17 @@ describe "sinatra-browse" do
     expect(last_response.errors).to be_empty
   end
 
-  it "coerses parameters into the defined types" do
-    get("features/type_coersion",
+  it "coerces parameters into the defined types" do
+    get("features/type_coercion",
       string: "joske",
       integer: "1",
       boolean: "false",
       float: "1.5",
-      array: "(1,2,3,4,5,6)",
-      hash: "(joske:jos, jefke:jef)"
     )
 
     expect(body['string']).to be_a(String)
     expect(body['integer']).to be_a(Integer)
     expect(body['boolean']).to be_a(FalseClass)
     expect(body['float']).to be_a(Float)
-    expect(body['array']).to be_a(Array)
-    expect(body['hash']).to be_a(Hash)
   end
 end

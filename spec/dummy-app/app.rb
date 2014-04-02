@@ -9,19 +9,17 @@ class App < Sinatra::Base
 
   before { content_type :json }
 
-  param :a, String
-  param :b, String
+  param :a, :String
+  param :b, :String
   get "/features/remove_undefined" do
     params.to_json
   end
 
-  param :string, String
-  param :integer, Integer
-  #param :boolean, Boolean
-  param :float, Float
-  param :array, Array
-  param :hash, Hash
-  get "/features/type_coersion" do
+  param :string, :String
+  param :integer, :Integer
+  param :boolean, :Boolean
+  param :float, :Float
+  get "/features/type_coercion" do
     params.to_json
   end
 end
