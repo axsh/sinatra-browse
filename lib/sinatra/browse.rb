@@ -56,7 +56,7 @@ module Sinatra::Browse
     app.get '/browse' do
       output = ""
       app.browse_routes.each { |name, route|
-        output += "<h1>#{name}</h1>"
+        output += "<h3>#{name}</h3>"
         output += "<p>#{route.description}</p><ul>"
         route.parameters.each { |param_key, param_value|
           output += "<li>#{param_key} #{param_value[:type]}</li>"
