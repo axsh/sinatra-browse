@@ -55,6 +55,7 @@ module Sinatra::Browse
         rescue Sinatra::Browse::Route::ValidationError => e
           halt 400, { error: "validation failed", message: e.message }.to_json
         end
+        browse_route.transform(params)
       end
     end
 

@@ -66,6 +66,15 @@ describe "sinatra-browse" do
     end
   end
 
+  describe "transform" do
+    it "does a to_proc on whatever was given and calls it on the parameter" do
+      get("features/string_validation", transform: "joske")
+      expect(body["transform"]).to eq("JOSKE")
+    end
+
+    #TODO: Define behaviour for something that doesn't respond to to_proc
+  end
+
   describe "String validation" do
     describe "in" do
       context "with a value present the array provided" do
@@ -84,15 +93,6 @@ describe "sinatra-browse" do
           #TODO: Check for error message?
         end
       end
-    end
-
-    describe "transform" do
-      it "does a to_proc on whatever was given and calls it on the parameter" do
-        get("features/string_validation", transform: "joske")
-        expect(body["transform"]).to eq("JOSKE")
-      end
-
-      #TODO: Define behaviour for something that doesn't respond to to_proc
     end
 
     describe "format" do
