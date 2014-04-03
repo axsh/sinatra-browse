@@ -22,6 +22,10 @@
       @parameters = parameters || {}
     end
 
+    def to_hash
+      {name: @name, description: @description}.merge @parameters
+    end
+
     def matches?(request_method, path_info)
       !! (build_name(request_method,path_info) =~ @match)
     end

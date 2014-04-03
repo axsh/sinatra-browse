@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 
+require 'yaml'
+
 module Sinatra::Browse
   def self.format(f, browse_routes)
     case f
     when "kusohtml"
       KusoHtml.new(browse_routes)
-    when "markdown"
-      Markdown.new(browse_routes)
+    when "json"
+      JSON.new(browse_routes)
+    when "yaml"
+      YAML.new(browse_routes)
     end
   end
 
@@ -31,18 +35,15 @@ module Sinatra::Browse
     end
   end
 
-  class Markdown < BrowseFormat
+  class JSON < BrowseFormat
     def generate
-      output = ""
-      @browse_routes.each { |name, route|
-        output += "# #{name}\n\n"
-        output += "#{route.description}\n\n"
-        route.parameters.each { |param_key, param_value|
-          output += "* #{param_key} #{param_value.to_s}\n"
-        }
-        output += "\n"
-      }
-      output.gsub("\n", "<br />")
+      @browse_routes.values.map { |br| br.to_hash }.to_json
+    end
+  end
+
+  class YAML < BrowseFormat
+    def generate
+      @browse_routes.values.map { |br| br.to_hash }.to_yaml
     end
   end
 end

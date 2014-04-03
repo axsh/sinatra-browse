@@ -60,7 +60,7 @@ module Sinatra::Browse
     end
 
     # Create the (future) browsable api
-    app.param :format, :String, in: ["kusohtml", "markdown"], default: "markdown"
+    app.param :format, :String, in: ["kusohtml", "json", "yaml"], default: "kusohtml"
     app.get '/browse' do
       Sinatra::Browse.format(params["format"], app.browse_routes).generate
     end
