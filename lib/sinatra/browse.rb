@@ -44,14 +44,11 @@ module Sinatra::Browse
     @app = app
 
     app.before do
+      browse_route = app.browse_routes_for(request.request_method, request.path_info)
       # Remove all parameters that weren't explicitly defined
       #TODO: Make this optional per route and global
-      path = request.path_info
-      reqm = request.request_method
-      #TODO: Make sure it doesn't crash when calling a route that wasn't defined
-      params.delete_if { |i| !app.browse_routes_for(reqm, path).has_parameter?(i) }
-
-      app.browse_routes_for(reqm, path).coerce_type(params)
+      params.delete_if { |i| !browse_route.has_parameter?(i) }
+      browse_route && browse_route.coerce_type(params)
     end
 
     # Create the (future) browsable api

@@ -4,7 +4,6 @@ require "spec_helper"
 
 describe "sinatra-browse" do
   let(:body) { JSON.parse(last_response.body) }
-  #before(:each) { get(url, params) }
 
   it "throws away parameters that weren't defined" do
     get("features/remove_undefined", a: "a", b: "b", c: "c")
