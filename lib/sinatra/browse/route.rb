@@ -39,6 +39,12 @@
       }
     end
 
+    def set_defaults(params)
+      @parameters.each { |k,v|
+        params[k] = v[:default] unless params[k] || v[:default].nil?
+      }
+    end
+
     private
     def cast_to_boolean(param)
       case param
