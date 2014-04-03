@@ -55,6 +55,7 @@
 
     def validate(params)
       @parameters.each { |k,v|
+        raise ValidationError, "in" if params[k] && v[:in] && !v[:in].member?(params[k])
         validate_string(params[k], v) if params[k] && v[:type] == :String
       }
     end
@@ -77,7 +78,6 @@
 
     def validate_string(param, options)
       #TODO: Improve errors
-      raise ValidationError, "in" if options[:in] && !options[:in].member?(param)
       raise ValidationError, "format" if options[:format] && !(param =~ options[:format])
     end
 
