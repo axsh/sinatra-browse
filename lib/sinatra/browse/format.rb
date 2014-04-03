@@ -16,7 +16,7 @@ module Sinatra::Browse
         output += "<h3>#{name}</h3>"
         output += "<p>#{route.description}</p><ul>"
         route.parameters.each { |param_key, param_value|
-          output += "<li>#{param_key} #{param_value[:type]}</li>"
+          output += "<li>#{param_key} #{param_value.to_s}</li>"
         }
         output += "</ul>"
       }
