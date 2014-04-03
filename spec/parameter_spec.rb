@@ -49,11 +49,20 @@ describe "sinatra-browse" do
   end
 
   describe "default values" do
-    it "sets default values for parameters that weren't provided" do
-      get("features/default")
-      expect(body['a']).to eq('yay')
-      expect(body['b']).to eq(11)
-      expect(body['c']).to eq(false)
+    context "with simple values" do
+      it "sets default values for parameters that weren't provided" do
+        get("features/default")
+        expect(body['a']).to eq('yay')
+        expect(body['b']).to eq(11)
+        expect(body['c']).to eq(false)
+      end
+    end
+
+    context "with a proc" do
+      it "will call the proc and set the result as the default value" do
+        get("features/default_proc")
+        expect(body['a']).to eq(2)
+      end
     end
   end
 

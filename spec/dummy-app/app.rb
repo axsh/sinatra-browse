@@ -30,6 +30,11 @@ class App < Sinatra::Base
     params.to_json
   end
 
+  param :a, :Integer, default: proc { 1 + 1 }
+  get "/features/default_proc" do
+    params.to_json
+  end
+
   param :in, :String, in: ["joske", "jefke"]
   param :transform, :String, transform: :upcase
   param :format, :String, format: /^nw-[a-z]{1,8}$/ #TODO: Generate examples in docs

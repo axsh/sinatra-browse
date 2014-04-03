@@ -43,7 +43,9 @@
 
     def set_defaults(params)
       @parameters.each { |k,v|
-        params[k] = v[:default] unless params[k] || v[:default].nil?
+        unless params[k] || v[:default].nil?
+          params[k] = v[:default].is_a?(Proc) ? v[:default].call(params[k]) : v[:default]
+        end
       }
     end
 
