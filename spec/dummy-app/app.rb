@@ -31,7 +31,7 @@ class App < Sinatra::Base
   end
 
   param :in, :String, in: ["joske", "jefke"]
-  param :transform, :String, transform: :to_ucase
+  param :transform, :String, transform: :upcase
   param :format, :String, format: /^nw-[a-z]{1,8}$/ #TODO: Generate examples in docs
   get "/features/string_validation" do
     params.to_json

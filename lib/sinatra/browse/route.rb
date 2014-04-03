@@ -53,7 +53,10 @@
 
     def validate(params)
       @parameters.each { |k,v|
-        validate_string(params[k], v) if params[k] && v[:type] == :String
+        if params[k] && v[:type] == :String
+          validate_string(params[k], v)
+          params[k] = v[:transform].to_proc.call(params[k]) if v[:transform]
+        end
       }
     end
 
