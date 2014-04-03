@@ -22,4 +22,18 @@ class App < Sinatra::Base
   get "/features/type_coercion" do
     params.to_json
   end
+
+  param :a, :String, default: "yay"
+  param :b, :Integer, default: 11
+  param :c, :Boolean, default: false
+  get "/features/default" do
+    params.to_json
+  end
+
+  param :in, :String, in: ["joske", "jefke"]
+  param :transform, :String, transform: :to_ucase
+  param :format, :String, format: /^nw-[a-z]{1,8}$/
+  get "/features/string_validation" do
+    params.to_json
+  end
 end

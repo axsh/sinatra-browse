@@ -48,4 +48,16 @@ describe "sinatra-browse" do
       end
     end
   end
+
+  describe "default values" do
+    it "sets default values for parameters that weren't provided" do
+      get("features/default")
+      expect(body['a']).to eq('yay')
+      expect(body['b']).to eq(11)
+      expect(body['c']).to eq(false)
+    end
+  end
+
+  describe "String validation" do
+  end
 end
