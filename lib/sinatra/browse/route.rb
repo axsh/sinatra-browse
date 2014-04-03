@@ -7,6 +7,8 @@
     attr_reader :match
     attr_reader :description
 
+    class ValidationError < Exception; end
+
     # This is here because we're using the name as the keys for the
     # _browse_routes hash. We want to build it outside of this class for that.
     def self.build_name(request_method, path_info)
@@ -49,6 +51,12 @@
       params.delete_if { |i| !self.has_parameter?(i) }
     end
 
+    def validate(params)
+      @parameters.each { |k,v|
+        validate_string(params[k], v) if params[k] && v[:type] == :String
+      }
+    end
+
     private
     def cast_to_boolean(param)
       case param
@@ -57,6 +65,12 @@
       when "n", "no", "f", "false", "0"
         false
       end
+    end
+
+    def validate_string(param, options)
+      #TODO: Improve errors
+      raise ValidationError, "in" if options[:in] && !options[:in].member?(param)
+      raise ValidationError, "format" if options[:format] && !(param =~ options[:format])
     end
 
     def build_name(request_method, path_info)
