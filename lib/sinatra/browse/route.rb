@@ -45,6 +45,10 @@
       }
     end
 
+    def delete_undefined(params)
+      params.delete_if { |i| !self.has_parameter?(i) }
+    end
+
     private
     def cast_to_boolean(param)
       case param

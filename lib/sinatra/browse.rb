@@ -45,10 +45,9 @@ module Sinatra::Browse
 
     app.before do
       browse_route = app.browse_routes_for(request.request_method, request.path_info)
-      # Remove all parameters that weren't explicitly defined
-      #TODO: Make this optional per route and global
+
       if browse_route
-        params.delete_if { |i| !browse_route.has_parameter?(i) }
+        browse_route.delete_undefined(params) #TODO: Make this optional per route and global
         browse_route.coerce_type(params)
         browse_route.set_defaults(params)
       end
