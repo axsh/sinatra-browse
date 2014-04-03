@@ -3,6 +3,7 @@
 require "sinatra/base"
 require "sinatra/browse"
 require "json"
+require "prime"
 
 class App < Sinatra::Base
   register Sinatra::Browse
@@ -39,6 +40,12 @@ class App < Sinatra::Base
   param :transform, :String, transform: :upcase
   param :format, :String, format: /^nw-[a-z]{1,8}$/ #TODO: Generate examples in docs
   get "/features/string_validation" do
+    params.to_json
+  end
+
+  param :single_digit, :Integer, in: 1..9
+  param :first_ten_primes, :Integer, in: Prime.take(10)
+  get "/features/integer_validation" do
     params.to_json
   end
 end
