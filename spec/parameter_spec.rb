@@ -85,5 +85,22 @@ describe "sinatra-browse" do
 
       #TODO: Define behaviour for something that doesn't respond to to_proc
     end
+
+    describe "format" do
+      context "with a string matching the format" do
+        it "allows the parameter to go through" do
+          get("features/string_validation", format: "nw-joske")
+          expect(body["format"]).to eq("nw-joske")
+        end
+      end
+
+      context "with a string that doesn't match the format" do
+        it "fails with a 400 status" do
+          get("features/string_validation", format: "garbage")
+          expect(status).to eq 400
+          #TODO: Check for error message?
+        end
+      end
+    end
   end
 end
