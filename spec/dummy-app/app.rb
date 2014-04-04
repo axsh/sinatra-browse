@@ -69,4 +69,10 @@ class App < Sinatra::Base
   get "/features/options_override/in_replaced" do
     params.to_json
   end
+
+  param :a, :String, depends_on: :b
+  param :b, :String
+  get "/features/depends_on" do
+    params.to_json
+  end
 end

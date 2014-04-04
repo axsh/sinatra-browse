@@ -182,6 +182,21 @@ describe "sinatra-browse" do
         expect(body["reused"]).to eq("nonkel_jan")
       end
     end
-
   end
+
+  describe "depends_on" do
+    it "accepts paramter 'a' only when parameter 'b' is also present" do
+      get("features/depends_on", a: "lol")
+      expect(status).to eq 400
+      get("features/depends_on", a: "lol", b: "lul")
+      expect(body["a"]).to eq("lol")
+      expect(body["b"]).to eq("lul")
+    end
+
+    it "accepts parameter 'b' even when 'a' is not present" do
+      get("features/depends_on", b: "lul")
+      expect(body["b"]).to eq("lul")
+    end
+  end
+
 end
