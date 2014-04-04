@@ -80,4 +80,9 @@ class App < Sinatra::Base
   get "/features/required" do
     params.to_json
   end
+
+  param :error, :Integer, in: 1..9, on_error: proc { halt 200, "we can handle it" }
+  get "/features/error_handing" do
+    params.to_json
+  end
 end
