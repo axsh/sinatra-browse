@@ -158,7 +158,7 @@ describe "sinatra-browse" do
       include_examples "standard behaviour"
     end
 
-    context "when an option is added" do
+    context "when a default option is added" do
       let(:url) { "default_added" }
       include_examples "standard behaviour"
 
