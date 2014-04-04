@@ -4,7 +4,9 @@ Self documenting parameter declaration framework for Sinatra.
 
 ## What problem do we solve?
 
-Sinatra has a very good and easy to read syntax for defining `GET`, `POST`, `DELETE` etc. routes. What it doesn't have is is a good way to declare parameters. Routes tend to get cluttered with inline parameter validations. There's no clear view of what parameters a route takes and what possible values they may have. There are a couple of frameworks out there that allow you to remedy this by writing big blocks of comments above routes but that method is still flawed. While it does give you a decent overview, you are still required to write all the inline validations just like you were before. Besides, you now also have the additional work of updating the comment blocks every time you change something in the code. All too often programmers change parameter behaviour and forget to update the comments.
+Sinatra has tools to define `GET`, `POST`, `DELETE` etc. routes. It doesn't have any tools to define parameters.
+
+There exist several frameworks that generate documentation based on comment blocks above routes. The problem is you have to update these every time something is changed in the code. We have seen programmers forget this in too many projects.
 
 ## How do we solve it?
 
