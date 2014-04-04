@@ -199,4 +199,13 @@ describe "sinatra-browse" do
     end
   end
 
+  describe "required" do
+    it "fails when a required parameter wasn't supplied" do
+      get("features/required", a: "a cow")
+      expect(body["a"]).to eq("a cow")
+      get("features/required")
+      expect(status).to eq 400
+    end
+  end
+
 end

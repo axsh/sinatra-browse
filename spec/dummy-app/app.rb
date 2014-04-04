@@ -75,4 +75,9 @@ class App < Sinatra::Base
   get "/features/depends_on" do
     params.to_json
   end
+
+  param :a, :String, required: true
+  get "/features/required" do
+    params.to_json
+  end
 end
