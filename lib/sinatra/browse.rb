@@ -30,6 +30,10 @@ module Sinatra::Browse
   end
   alias :desc :describe
 
+  def parameter_options(parameter, options)
+  end
+  alias :param_options :parameter_options
+
   def browse_routes_for(request_method, path_info)
     browse_routes.values.find { |v| v.matches?(request_method, path_info) }
   end

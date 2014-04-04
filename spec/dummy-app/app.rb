@@ -48,4 +48,25 @@ class App < Sinatra::Base
   get "/features/integer_validation" do
     params.to_json
   end
+
+  def self.helper_method
+    param :reused, :String, in: ["joske", "jefke"]
+  end
+
+  helper_method
+  get "/features/options_override/not_overridden" do
+    params.to_json
+  end
+
+  helper_method
+  param_options :reused, default: "joske"
+  get "/features/options_override/default_added" do
+    params.to_json
+  end
+
+  helper_method
+  param_options :reused, in: ["jossefien", "nonkel_jan"]
+  get "/features/options_override/in_replaced" do
+    params.to_json
+  end
 end
