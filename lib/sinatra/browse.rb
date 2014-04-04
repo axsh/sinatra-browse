@@ -56,10 +56,17 @@ module Sinatra::Browse
         browse_route.delete_undefined(params) #TODO: Make this optional per route and global
         browse_route.coerce_type(params)
         browse_route.set_defaults(params)
-        begin
-          browse_route.validate(params)
-        rescue Sinatra::Browse::Route::ValidationError => e
-          halt 400, { error: "validation failed", message: e.message }.to_json
+        validation_result = browse_route.validate(params)
+        unless validation_result[:success]
+          if validation_result[:on_error].respond_to?(:to_proc)
+            instance_exec &validation_result[:on_error].to_proc
+          else
+            halt 400, {
+              error: "parameter validation failed",
+              parameter: validation_result[:name],
+              reason: validation_result[:reason]
+            }.to_json
+          end
         end
         browse_route.transform(params)
       end

@@ -59,11 +59,15 @@
 
     def validate(params)
       @parameters.each { |k,v|
-        raise ValidationError, "required" if !params[k] && v[:required]
-        raise ValidationError, "depends_on" if v[:depends_on] && !params[v[:depends_on]]
-        raise ValidationError, "in" if params[k] && v[:in] && !v[:in].member?(params[k])
-        validate_string(params[k], v) if params[k] && v[:type] == :String
+        return fail_validation v, :required if !params[k] && v[:required]
+        if params[k]
+          return fail_validation v, :depends_on if v[:depends_on] && !params[v[:depends_on]]
+          return fail_validation v, :in if v[:in] && !v[:in].member?(params[k])
+          return fail_validation v, :format if v[:type] == :String && v[:format] && !(params[k] =~ v[:format])
+        end
       }
+
+      {success: true}
     end
 
     def transform(params)
@@ -84,7 +88,10 @@
 
     def validate_string(param, options)
       #TODO: Improve errors
-      raise ValidationError, "format" if options[:format] && !(param =~ options[:format])
+    end
+
+    def fail_validation(parameter, reason)
+      { success: false, reason: reason }.merge parameter
     end
 
     def build_name(request_method, path_info)

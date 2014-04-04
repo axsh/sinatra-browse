@@ -212,7 +212,7 @@ describe "sinatra-browse" do
     it "allows for custom error handling" do
       get("features/error_handing", error: 20)
       expect(status).to eq 200
-      expect(last response.body).to eq "we can handle it"
+      expect(last_response.body).to eq "we can handle it"
     end
   end
 
