@@ -53,6 +53,7 @@ module Sinatra::Browse
       browse_route = app.browse_routes_for(request.request_method, request.path_info)
 
       if browse_route
+        #TODO: Optionally throw error for undefined params
         browse_route.delete_undefined(params) #TODO: Make this optional per route and global
         browse_route.coerce_type(params)
         browse_route.set_defaults(params)

@@ -86,10 +86,6 @@
       end
     end
 
-    def validate_string(param, options)
-      #TODO: Improve errors
-    end
-
     def fail_validation(parameter, reason)
       { success: false, reason: reason }.merge parameter
     end
