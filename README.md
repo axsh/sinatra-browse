@@ -49,6 +49,15 @@ At the time of writing four parameter types are available.
 * `:Float`
 * `:Boolean` ["1/0", "true/false", "t/f", "yes/no", "y/n"]
 
+## Default values
+
+You can set default values in your declarations. These will be used when the parameter in question wasn't provided in the request. You can either set the default value or provide a proc to generate it.
+
+```ruby
+param :media_type, :String, default: "book"
+param :year, :Integer, default: lambda { Time.now.year }
+```
+
 ## Parameter validation
 
 You can write some quick validation logic directly in the parameter declaration. If the validation fails, either a standard 400 error will be returned or a custom error block will execute if provided.
@@ -56,7 +65,17 @@ You can write some quick validation logic directly in the parameter declaration.
 `required` Fails if this parameter is not provided in the request.
 
 ```ruby
-param :you_must_include_me, :String, requied: true
+param :you_must_include_me, :String, required: true
+```
+
+`depends_on` Some times there are parameters that are required by other parameters. Use `depends_on` to implement this.
+
+The example below will allow you to post something either anonymously or as a user. If you provide the *user_name* parameter, the *password* parameter will be required as well.
+
+```ruby
+param :post_something, :String
+param :user_name, :String, depends_on: :password
+param :password, :String
 ```
 
 `in` Fails if this parameter is not included in the values set by `in`. You can use anything that responds to *.member?* like an array or a range.
@@ -85,3 +104,12 @@ end
 ```
 
 If a request is made that fails validation on the *lets_fail* parameter, then the proc provided to `on_error` will be called **in the same scope as your route**. Therefore you have access to Sinatra keywords such as *halt*.
+
+## Parameter transformation
+
+You can use transform to execute a quick method on any prameter provided. Anything that will respond to *to_proc* will do.
+
+```ruby
+param :only_caps, :String, transform :upcase
+param :power_of_two, :Integer transform: proc { |n| n * n }
+```
