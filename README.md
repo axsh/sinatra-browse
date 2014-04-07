@@ -36,7 +36,9 @@ Here we have a clear list of what parameters are expected and how they are valid
 
 **Question:** But we don't want to go look at source code just to get api documentation. What do we do?
 
-Sinatra-browse automatically generates documentation from your parameter validations. Just surf to the following url in your browser. *http://<api_ip_address>:<api_port>/browse*
+Sinatra-browse automatically generates documentation from your parameter validations. Just surf to the following url in your browser.
+
+    http://<api_ip_address>:<api_port>/browse
 
 The syntax is inspired by the [sinatra-param](https://github.com/mattt/sinatra-param) and [thor](https://github.com/erikhuda/thor) projects.
 
