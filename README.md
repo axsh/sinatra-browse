@@ -21,7 +21,7 @@ class App < Sinatra::Base
 
   description "Creates a new user"
   param :display_name, :String, required: true
-  param :type, :String, in: ["admin", "moderator", "user"], default: user
+  param :type, :String, in: ["admin", "moderator", "user"], default: "user"
   param :age, :Integer
   param :gender, :String, in: ["m", "w", "M", "W"], transform: :upcase
   param :activated, :Boolean, default: false
