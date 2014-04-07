@@ -109,5 +109,5 @@ You can use transform to execute a quick method on any prameter provided. Anythi
 
 ```ruby
 param :only_caps, :String, transform :upcase
-param :power_of_two, :Integer transform: proc { |n| n * n }
+param :power_of_two, :Integer, transform: proc { |n| n * n }
 ```
