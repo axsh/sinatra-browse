@@ -1,6 +1,6 @@
 # sinatra-browse
 
-Self documenting parameter declaration framework for Sinatra.
+Parameter declaration framework and browsable API for Sinatra.
 
 ## What problem do we solve?
 
@@ -9,6 +9,8 @@ Sinatra has tools to define `GET`, `POST`, `DELETE` etc. routes. It doesn't have
 There exist several frameworks that generate documentation based on comment blocks above routes. The problem is you have to update these every time something is changed in the code. We have seen programmers forget this in too many projects.
 
 ## How do we solve it?
+
+**Parameter Declaration**
 
 We believe in using actual code as documentation. Take a look at the following example.
 
@@ -34,13 +36,15 @@ end
 
 Here we have a clear list of what parameters are expected and how they are validated. Since this is code and not a comment block, it will always be up to date with the behaviour of our application.
 
-**Question:** But we don't want to go look at source code just to get api documentation. What do we do?
+The syntax is inspired by the [sinatra-param](https://github.com/mattt/sinatra-param) and [thor](https://github.com/erikhuda/thor) projects.
 
-Sinatra-browse automatically generates documentation from your parameter validations. Just surf to the following url in your browser.
+**Browsable API**
+
+Sinatra-browse allows you to surf to your API. This works as documentation and allows you to send requests and see their responses directly in your browser.
 
     http://<api_ip_address>:<api_port>/browse
 
-The syntax is inspired by the [sinatra-param](https://github.com/mattt/sinatra-param) and [thor](https://github.com/erikhuda/thor) projects.
+*Remark:* This is still work in progress. Right now the page only shows some simple documentation.
 
 ## Parameter types
 
@@ -110,6 +114,6 @@ If a request is made that fails validation on the *lets_fail* parameter, then th
 You can use transform to execute a quick method on any prameter provided. Anything that will respond to *to_proc* will do.
 
 ```ruby
-param :only_caps, :String, transform :upcase
+param :only_caps, :String, transform: :upcase
 param :power_of_two, :Integer, transform: proc { |n| n * n }
 ```
