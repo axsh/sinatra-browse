@@ -46,16 +46,6 @@ Sinatra-browse allows you to surf to your API. This works as documentation and a
 
 *Remark:* This is still work in progress. Right now the page only shows some simple documentation.
 
-## Removing undefined parameters
-
-By default sinatra-browse removes all parameters that weren't defined. You can disable this behaviour with the following line.
-
-    disable :remove_undefined_parameters
-
-You can also set a `system_parameters` variable to allow for a select few parameters that aren't removed. By default this is set to *[ "splat", "captures" ]*.
-
-    set system_parameters: [ "id", "username", "password" ]
-
 ## Parameter types
 
 At the time of writing four parameter types are available.
@@ -127,3 +117,12 @@ You can use transform to execute a quick method on any prameter provided. Anythi
 param :only_caps, :String, transform: :upcase
 param :power_of_two, :Integer, transform: proc { |n| n * n }
 ```
+## Removing undefined parameters
+
+By default sinatra-browse removes all parameters that weren't defined. You can disable this behaviour with the following line.
+
+    disable :remove_undefined_parameters
+
+You can also set a `system_parameters` variable to allow for a select few parameters that aren't removed. By default this is set to *[ "splat", "captures" ]*.
+
+    set system_parameters: [ "id", "username", "password" ]
