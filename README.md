@@ -111,7 +111,7 @@ If a request is made that fails validation on the *lets_fail* parameter, then th
 
 ## Parameter transformation
 
-You can use transform to execute a quick method on any prameter provided. Anything that will respond to *to_proc* will do.
+You can use transform to execute a quick method on any prameter provided. Anything that responds to *to_proc* will do.
 
 ```ruby
 param :only_caps, :String, transform: :upcase
