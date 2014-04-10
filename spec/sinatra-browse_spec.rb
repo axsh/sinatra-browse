@@ -32,6 +32,17 @@ describe "sinatra-browse" do
     expect(body['float']).to be_a(Float)
   end
 
+  describe "disable :remove_undefined_parameters" do
+    def app; OtherApp end
+
+    it "doesn't remove undefined parameters" do
+      get("features/dont_remove_undefined", a: "joske", b: "jefke") do
+        expect(body["a"]).to eq("joske")
+        expect(body["b"]).to eq("jefke")
+      end
+    end
+  end
+
   describe "Boolean coercion" do
     ["y", "yes", "t", "true", "1"].each do |i|
       it "returns true for '#{i}'" do

@@ -5,6 +5,20 @@ require "sinatra/browse"
 require "json"
 require "prime"
 
+# This application is just here so we can test disabling the remove_undefined_parameters flag
+class OtherApp < Sinatra::Base
+  register Sinatra::Browse
+
+  before { content_type :json }
+
+  disable :remove_undefined_parameters
+
+  param :a, :String
+  get "/features/dont_remove_undefined" do
+    params.to_json
+  end
+end
+
 class App < Sinatra::Base
   register Sinatra::Browse
 
