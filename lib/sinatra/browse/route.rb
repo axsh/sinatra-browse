@@ -53,8 +53,8 @@
       }
     end
 
-    def delete_undefined(params)
-      params.delete_if { |i| !self.has_parameter?(i) }
+    def delete_undefined(params, system_params)
+      params.delete_if { |i| !(self.has_parameter?(i) || system_params.member?(i)) }
     end
 
     def validate(params)

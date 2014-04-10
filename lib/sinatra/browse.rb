@@ -50,13 +50,19 @@ module Sinatra::Browse
     @app = app
 
     app.enable :remove_undefined_parameters
+    app.set system_parameters: ["splat", "captures"]
 
     app.before do
       browse_route = app.browse_routes_for(request.request_method, request.path_info)
 
       if browse_route
         #TODO: Optionally throw error for undefined params
-        browse_route.delete_undefined(params) if settings.remove_undefined_parameters
+        #TODO: Make undefined parameter deletion optional per route
+
+        if settings.remove_undefined_parameters
+          browse_route.delete_undefined(params, settings.system_parameters)
+        end
+
         browse_route.coerce_type(params)
         browse_route.set_defaults(params)
         validation_result = browse_route.validate(params)

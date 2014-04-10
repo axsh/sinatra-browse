@@ -11,10 +11,24 @@ class OtherApp < Sinatra::Base
 
   before { content_type :json }
 
+  #TODO: Document this in the readme
   disable :remove_undefined_parameters
 
   param :a, :String
   get "/features/dont_remove_undefined" do
+    params.to_json
+  end
+end
+
+class SystemParamApp < Sinatra::Base
+  register Sinatra::Browse
+
+  before { content_type :json }
+
+  set system_parameters: ["dont_remove"]
+
+  param :a, :String
+  get "/features/dont_remove_system" do
     params.to_json
   end
 end
