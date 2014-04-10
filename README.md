@@ -52,7 +52,7 @@ By default sinatra-browse removes all parameters that weren't defined. You can d
 
     disable :remove_undefined_parameters
 
-You can also set a `system_parameters` variable to allow for a select few parameters that aren't removed. By default this is set to `[ "splat", "captures" ]`.
+You can also set a `system_parameters` variable to allow for a select few parameters that aren't removed. By default this is set to *[ "splat", "captures" ]*.
 
     set system_parameters: [ "id", "username", "password" ]
 
