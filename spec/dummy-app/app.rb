@@ -11,7 +11,6 @@ class OtherApp < Sinatra::Base
 
   before { content_type :json }
 
-  #TODO: Document this in the readme
   disable :remove_undefined_parameters
 
   param :a, :String
