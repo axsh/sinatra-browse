@@ -59,11 +59,11 @@
 
     def validate(params)
       @parameters.each { |k,v|
-        return fail_validation v, :required if !params[k] && v[:required]
+        return fail_validation k, params[k], v, :required if !params[k] && v[:required]
         if params[k]
-          return fail_validation v, :depends_on if v[:depends_on] && !params[v[:depends_on]]
-          return fail_validation v, :in if v[:in] && !v[:in].member?(params[k])
-          return fail_validation v, :format if v[:type] == :String && v[:format] && !(params[k] =~ v[:format])
+          return fail_validation k, params[k], v, :depends_on if v[:depends_on] && !params[v[:depends_on]]
+          return fail_validation k, params[k], v, :in if v[:in] && !v[:in].member?(params[k])
+          return fail_validation k, params[k], v, :format if v[:type] == :String && v[:format] && !(params[k] =~ v[:format])
         end
       }
 
@@ -86,8 +86,8 @@
       end
     end
 
-    def fail_validation(parameter, reason)
-      { success: false, reason: reason }.merge parameter
+    def fail_validation(parameter, value, options, reason)
+      {success: false, reason: reason , parameter: parameter, value: value}.merge(options)
     end
 
     def build_name(request_method, path_info)

@@ -68,11 +68,13 @@ module Sinatra::Browse
         validation_result = browse_route.validate(params)
         unless validation_result[:success]
           if validation_result[:on_error].respond_to?(:to_proc)
-            instance_exec &validation_result[:on_error].to_proc
+            error_proc = validation_result.delete(:on_error).to_proc
+            instance_exec validation_result, &error_proc
           else
             halt 400, {
               error: "parameter validation failed",
-              parameter: validation_result[:name],
+              parameter: validation_result[:parameter],
+              value: validation_result[:value],
               reason: validation_result[:reason]
             }.to_json
           end
