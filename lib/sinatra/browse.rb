@@ -46,11 +46,25 @@ module Sinatra::Browse
     browse_routes[new_route.name] = new_route
   end
 
+  def default_on_error(&blk)
+    @default_on_error = blk if block_given?
+    @default_on_error
+  end
+
   def self.registered(app)
     @app = app
 
     app.enable :remove_undefined_parameters
     app.set system_parameters: ["splat", "captures"]
+
+    app.default_on_error do |error_hash|
+      halt 400, {
+        error: "parameter validation failed",
+        parameter: error_hash[:parameter],
+        value: error_hash[:value],
+        reason: error_hash[:reason]
+      }.to_json
+    end
 
     app.before do
       browse_route = app.browse_routes_for(request.request_method, request.path_info)
@@ -70,12 +84,7 @@ module Sinatra::Browse
             error_proc = validation_result.delete(:on_error).to_proc
             instance_exec validation_result, &error_proc
           else
-            halt 400, {
-              error: "parameter validation failed",
-              parameter: validation_result[:parameter],
-              value: validation_result[:value],
-              reason: validation_result[:reason]
-            }.to_json
+            instance_exec validation_result, &app.default_on_error
           end
         end
         browse_route.transform(params)

@@ -235,4 +235,14 @@ describe "sinatra-browse" do
     end
   end
 
+  describe "self.default_on_error" do
+    def app; StandardErrorOverrideApp end
+
+    it "allows the user to define default behaviour on parameter errors" do
+      get "/features/default_error_override", a: "b"
+      expect(status).to eq 400
+      expect(last_response.body).to eq "we had an error"
+    end
+  end
+
 end
