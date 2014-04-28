@@ -126,3 +126,17 @@ By default sinatra-browse removes all parameters that weren't defined. You can d
 You can also set a `system_parameters` variable to allow for a select few parameters that aren't removed. By default this is set to *[ "splat", "captures" ]*.
 
     set system_parameters: [ "id", "username", "password" ]
+
+## Named parameters in route patterns
+
+Unfortunately you are not able to use Sinatra-browse for named parameters in the route definition. Take the following example.
+
+```ruby
+get 'foo/:bar' do
+  # some code
+end
+```
+
+You will ***not*** be able to define the parameter `bar`. This is because Sinatra-browse does its thing in a before block and these parameters aren't added to the `params` hash until the route itself gets executed.
+
+Some exta discussion of this problem can be found [here](https://github.com/sinatra/sinatra/issues/417).
