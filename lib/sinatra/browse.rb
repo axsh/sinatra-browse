@@ -57,7 +57,6 @@ module Sinatra::Browse
 
       if browse_route
         #TODO: Optionally throw error for undefined params
-        #TODO: Make undefined parameter deletion optional per route
 
         if settings.remove_undefined_parameters
           browse_route.delete_undefined(params, settings.system_parameters)
