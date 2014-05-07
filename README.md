@@ -111,7 +111,7 @@ If a request is made that fails validation on the *lets_fail* parameter, then th
 
 ### The error hash
 
-If you want to write a bit more intricate error handling, you can add *the error hash* as an argument to your proc. This hash will hold some extra information about what exactly went wrong.
+If you want to write a bit more intricate error handling, you can add *the error hash* as an argument to your `on_error` proc. This hash holds some extra information about what exactly went wrong.
 
 ```ruby
 param :lets_fail, :Integer, in: 1..9, required: true, on_error: proc { |error_hash|
@@ -127,13 +127,39 @@ get 'example_route' do
 end
 ```
 
-The parameter hash contains the following keys:
+The error hash contains the following keys:
 
 * `:reason` This tells you what validation failed. Possible values could be `:in`, `:required`, `:format`, etc.
 * `:parameter` The name of the faulty parameter.
 * `:value` The value our parameter had which caused it to fail validation.
 * `:type` The type of our parameter. Could be `:String`, `:Integer`, etc.
 * Any validation keys that were set in the parameter declaration will also be available in the error hash.
+
+### Overriding default error behaviour
+
+So we explained how to do error handling for single parameters. Now what if we wanted to set error handling for the entire application? You can do that with the `default_on_error` method.
+
+```ruby
+default_on_error do |error_hash|
+  case error_hash[:reason]
+  when :required
+    halt 400, "#{error_hash[:parameter]} is required! provide it!"
+  else
+    _default_on_error(error_hash)
+  end
+end
+
+param :a, :String, in: ["a"], required: true
+param :b, :String, format: /^bbb$/
+get "/features/default_error_override" do
+  # Again this is the scope that default_on_error is executed in
+  params.to_json
+end
+```
+
+The block we passed to the `default_on_error` method will be called or every parameter in our application that fails validation and does not have its own `on_error` block. Notice how inside our `default_on_error`
+
+You might notice that in our example, the `default_on_error` method makes a call to `_default_on_error`. The latter is a fallback to sinatra-browse's standard error behaviour. It's available form both the `default_on_error` block and procs passed to `on_error` in parameter declarations.
 
 ## Parameter transformation
 
@@ -143,6 +169,7 @@ You can use transform to execute a quick method on any prameter provided. Anythi
 param :only_caps, :String, transform: :upcase
 param :power_of_two, :Integer, transform: proc { |n| n * n }
 ```
+
 ## Removing undefined parameters
 
 By default sinatra-browse removes all parameters that weren't defined. You can disable this behaviour with the following line.
