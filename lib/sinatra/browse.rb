@@ -55,8 +55,9 @@ module Sinatra::Browse
     @app = app
 
     app.enable :remove_undefined_parameters
-    app.set system_parameters: ["splat", "captures"]
+    app.set allowed_undefined_parameters: []
 
+    #TODO: Figure out a better way so users can call this "super" block
     app.default_on_error do |error_hash|
       halt 400, {
         error: "parameter validation failed",
@@ -73,7 +74,7 @@ module Sinatra::Browse
         #TODO: Optionally throw error for undefined params
 
         if settings.remove_undefined_parameters
-          browse_route.delete_undefined(params, settings.system_parameters)
+          browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
         end
 
         browse_route.coerce_type(params)

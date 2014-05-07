@@ -24,10 +24,10 @@ class SystemParamApp < Sinatra::Base
 
   before { content_type :json }
 
-  set system_parameters: ["dont_remove"]
+  set allowed_undefined_parameters: ["dont_remove"]
 
   param :a, :String
-  get "/features/dont_remove_system" do
+  get "/features/dont_remove_allowed" do
     params.to_json
   end
 end
