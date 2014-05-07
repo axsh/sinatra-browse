@@ -57,6 +57,8 @@ module Sinatra::Browse
     app.enable :remove_undefined_parameters
     app.set allowed_undefined_parameters: []
 
+    app.disable :show_head_routes
+
     app.class_eval {
       def _default_on_error(error_hash)
         halt 400, {
@@ -103,6 +105,7 @@ module Sinatra::Browse
   end
 
   def self.route_added(verb, path, block)
+    return if verb == "HEAD" && !@app.settings.show_head_routes
     @app.set_browse_routes_for(verb, path)
     @app.reset_temp_params
     @app.desc ""
