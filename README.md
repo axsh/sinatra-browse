@@ -96,6 +96,15 @@ param :order, :String, in: ["ascending", "descending"]
 param :alphanumeric, :String, format: /^[0-9A-Za-z]*$/
 ```
 
+## Parameter transformation
+
+You can use transform to execute a quick method on any prameter provided. Anything that responds to *to_proc* will do.
+
+```ruby
+param :only_caps, :String, transform: :upcase
+param :power_of_two, :Integer, transform: proc { |n| n * n }
+```
+
 ## Error handling
 
 When a validation fails, a standard 400 error will be returned. You can override this and do your own error handling using `on_error`.
@@ -161,24 +170,19 @@ The block we passed to the `default_on_error` method will be called or every par
 
 You might notice that in our example, the `default_on_error` method makes a call to `_default_on_error`. The latter is a fallback to sinatra-browse's standard error behaviour. It's available form both the `default_on_error` block and procs passed to `on_error` in parameter declarations.
 
-## Parameter transformation
-
-You can use transform to execute a quick method on any prameter provided. Anything that responds to *to_proc* will do.
-
-```ruby
-param :only_caps, :String, transform: :upcase
-param :power_of_two, :Integer, transform: proc { |n| n * n }
-```
-
 ## Removing undefined parameters
 
 By default sinatra-browse removes all parameters that weren't defined. You can disable this behaviour with the following line.
 
-    disable :remove_undefined_parameters
+```ruby
+disable :remove_undefined_parameters
+```
 
 You can also set a `allowed_undefined_parameters` variable to allow for a select few parameters that aren't removed.
 
-    set allowed_undefined_parameters: [ "id", "username", "password" ]
+```ruby
+set allowed_undefined_parameters: [ "id", "username", "password" ]
+```
 
 ## Named parameters in route patterns
 
