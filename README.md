@@ -101,13 +101,39 @@ param :alphanumeric, :String, format: /^[0-9A-Za-z]*$/
 When a validation fails, a standard 400 error will be returned. You can override this and do your own error handling using `on_error`.
 
 ```ruby
-param :lets_fail, :Integer, in: 1..9, on_error: proc { halt 404, "if you're not giving us a number between 1 and 9, we're going to pretend not to be here!" }
+param :lets_fail, :Integer, in: 1..9, on_error: proc { halt 400, "Must be between 1 and 9!" }
 get 'example_route' do
   # This is the scope that the on_error proc will be executed in.
 end
 ```
 
 If a request is made that fails validation on the *lets_fail* parameter, then the proc provided to `on_error` will be called **in the same scope as your route**. Therefore you have access to Sinatra keywords such as *halt*.
+
+### The error hash
+
+If you want to write a bit more intricate error handling, you can add *the error hash* as an argument to your proc. This hash will hold some extra information about what exactly went wrong.
+
+```ruby
+param :lets_fail, :Integer, in: 1..9, required: true, on_error: proc { |error_hash|
+  case error_hash[:reason]
+  when :in
+    halt 400, "Must be between 1 and 9!"
+  when :required
+    halt 400, "Why u no give us lets_fail?"
+  end
+}
+get 'example_route' do
+  # Some code
+end
+```
+
+The parameter hash contains the following keys:
+
+* `:reason` This tells you what validation failed. Possible values could be `:in`, `:required`, `:format`, etc.
+* `:parameter` The name of the faulty parameter.
+* `:value` The value our parameter had which caused it to fail validation.
+* `:type` The type of our parameter. Could be `:String`, `:Integer`, etc.
+* Any validation keys that were set in the parameter declaration will also be available in the error hash.
 
 ## Parameter transformation
 
