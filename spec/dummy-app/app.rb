@@ -35,9 +35,17 @@ end
 class StandardErrorOverrideApp < Sinatra::Base
   register Sinatra::Browse
 
-  default_on_error { |error_hash| halt 400, "we had an error" }
+  default_on_error do |error_hash|
+    case error_hash[:reason]
+    when :in
+      halt 400, "we had an error"
+    else
+      _default_on_error(error_hash)
+    end
+  end
 
   param :a, :String, in: ["a"]
+  param :b, :String, format: /^bbb$/
   get "/features/default_error_override" do
     params.to_json
   end

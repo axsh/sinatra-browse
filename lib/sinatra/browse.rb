@@ -57,15 +57,18 @@ module Sinatra::Browse
     app.enable :remove_undefined_parameters
     app.set allowed_undefined_parameters: []
 
-    #TODO: Figure out a better way so users can call this "super" block
-    app.default_on_error do |error_hash|
-      halt 400, {
-        error: "parameter validation failed",
-        parameter: error_hash[:parameter],
-        value: error_hash[:value],
-        reason: error_hash[:reason]
-      }.to_json
-    end
+    app.class_eval {
+      def _default_on_error(error_hash)
+        halt 400, {
+          error: "parameter validation failed",
+          parameter: error_hash[:parameter],
+          value: error_hash[:value],
+          reason: error_hash[:reason]
+        }.to_json
+      end
+    }
+
+    app.default_on_error { |error_hash| _default_on_error(error_hash) }
 
     app.before do
       browse_route = app.browse_routes_for(request.request_method, request.path_info)
