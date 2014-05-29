@@ -90,10 +90,26 @@ param :small_prime_number, :Integer, in: Prime.take(10)
 param :order, :String, in: ["ascending", "descending"]
 ```
 
-`format` This validation is only for parameters of type `:String`. You can pass a regular expression that the string provided must match to.
+### String validation
+
+The following parameter validators can only be used for parameters of type `:String`.
+
+`format` You can pass a regular expression that the string provided must match to.
 
 ```ruby
 param :alphanumeric, :String, format: /^[0-9A-Za-z]*$/
+```
+
+`min_length` The string must be of this length or longer.
+
+```ruby
+param :five_or_longer, :String, min_length: 5
+```
+
+`max_length` The string must be of this length or shorter.
+
+```ruby
+param :five_or_shorter, :String, max_length: 5
 ```
 
 ## Parameter transformation
