@@ -94,7 +94,7 @@ param :order, :String, in: ["ascending", "descending"]
 
 The following parameter validators can only be used for parameters of type `:String`.
 
-`format` You can pass a regular expression that the string provided must match to.
+`format` The string must match this regular expression.
 
 ```ruby
 param :alphanumeric, :String, format: /^[0-9A-Za-z]*$/
