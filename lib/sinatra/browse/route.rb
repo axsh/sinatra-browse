@@ -63,7 +63,12 @@
         if params[k]
           return fail_validation k, params[k], v, :depends_on if v[:depends_on] && !params[v[:depends_on]]
           return fail_validation k, params[k], v, :in if v[:in] && !v[:in].member?(params[k])
-          return fail_validation k, params[k], v, :format if v[:type] == :String && v[:format] && !(params[k] =~ v[:format])
+
+          if v[:type] == :String
+            return fail_validation k, params[k], v, :format if v[:format] && !(params[k] =~ v[:format])
+            return fail_validation k, params[k], v, :min_length if v[:min_length] && params[k].length < v[:min_length]
+            return fail_validation k, params[k], v, :max_length if v[:max_length] && params[k].length > v[:max_length]
+          end
         end
       }
 

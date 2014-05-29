@@ -148,16 +148,16 @@ describe "sinatra-browse" do
     end
 
     describe "max_length" do
-      context "with a string longer than the max_length" do
+      context "with a string shorter than the max_length" do
         it "works fine and dandy" do
-          get("features/string_validation", max_length: "123456")
-          expect(body["max_length"]).to eq("123456")
+          get("features/string_validation", max_length: "1234")
+          expect(body["max_length"]).to eq("1234")
         end
       end
 
-      context "with a string shorter than the max_length" do
+      context "with a string longer than the max_length" do
         it "fails with a 400 status" do
-          get("features/string_validation", max_length: "1234")
+          get("features/string_validation", max_length: "123456")
           expect(status).to eq 400
         end
       end
