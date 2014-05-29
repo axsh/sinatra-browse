@@ -145,6 +145,13 @@ describe "sinatra-browse" do
           expect(status).to eq 400
         end
       end
+
+      context "with a string exactly as long as the min_length" do
+        it "works fine and dandy" do
+          get("features/string_validation", min_length: "12345")
+          expect(body["min_length"]).to eq("12345")
+        end
+      end
     end
 
     describe "max_length" do
@@ -159,6 +166,13 @@ describe "sinatra-browse" do
         it "fails with a 400 status" do
           get("features/string_validation", max_length: "123456")
           expect(status).to eq 400
+        end
+      end
+
+      context "with a string exactly as long as the max_length" do
+        it "works fine and dandy" do
+          get("features/string_validation", max_length: "12345")
+          expect(body["max_length"]).to eq("12345")
         end
       end
     end
