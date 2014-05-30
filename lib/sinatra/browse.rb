@@ -45,8 +45,16 @@ module Sinatra::Browse
   end
 
   #TODO: Rename method... It doesn't sound like we'd be creating a new route object here
-  def set_browse_routes_for(request_method, path_info, description = browse_description, new_params = temp_browse_params)
-    new_route = Route.new(request_method, path_info, browse_description, new_params)
+  def set_browse_routes_for(request_method,
+                            path_info,
+                            description = browse_description,
+                            new_params = temp_browse_params)
+
+    new_route = Route.new(request_method,
+                          path_info,
+                          browse_description,
+                          new_params)
+
     browse_routes[new_route.name] = new_route
   end
 
