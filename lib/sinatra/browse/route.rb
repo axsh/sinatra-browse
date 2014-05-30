@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
- module Sinatra::Browse
+module Sinatra::Browse
   class Route
     attr_reader :parameters
     attr_reader :name
