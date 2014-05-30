@@ -10,7 +10,11 @@ module Sinatra::Browse
   end
 
   def parameter_options(parameter, options)
-    #TODO: Raise error when the parameter overridden doesn't exist
+    if temp_browse_params[parameter].nil?
+      msg = "Tried to override undeclared parameter #{parameter}"
+      raise Errors::UnknownParameterError, msg
+    end
+
     temp_browse_params[parameter].merge! options
   end
   alias :param_options :parameter_options
@@ -76,8 +80,6 @@ module Sinatra::Browse
       browse_route = app.browse_routes_for(request.request_method, request.path_info)
 
       if browse_route
-        #TODO: Optionally throw error for undefined params
-
         if settings.remove_undefined_parameters
           browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
         end

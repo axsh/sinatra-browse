@@ -247,6 +247,27 @@ describe "sinatra-browse" do
         expect(body["reused"]).to eq("nonkel_jan")
       end
     end
+
+    context "when a non existing parameter is overriden" do
+      def broken_app
+        Class.new(Sinatra::Base) do
+          register Sinatra::Browse
+
+          before { content_type :json }
+
+          param :a, :String
+          param_options :b, required: true
+          get "/features/override_error" do
+            params.to_json
+          end
+        end
+      end
+
+      it "raises a UnknownParameterError" do
+        error = Sinatra::Browse::Errors::UnknownParameterError
+        expect(lambda {broken_app}).to raise_error(error)
+      end
+    end
   end
 
   describe "depends_on" do
