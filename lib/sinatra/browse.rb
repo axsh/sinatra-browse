@@ -44,8 +44,7 @@ module Sinatra::Browse
     browse_routes.values.find { |v| v.matches?(request_method, path_info) }
   end
 
-  #TODO: Rename method... It doesn't sound like we'd be creating a new route object here
-  def set_browse_routes_for(request_method,
+  def create_browse_route(request_method,
                             path_info,
                             description = browse_description,
                             new_params = temp_browse_params)
@@ -116,7 +115,7 @@ module Sinatra::Browse
 
   def self.route_added(verb, path, block)
     return if verb == "HEAD" && !@app.settings.show_head_routes
-    @app.set_browse_routes_for(verb, path)
+    @app.create_browse_route(verb, path)
     @app.reset_temp_params
     @app.desc ""
   end
