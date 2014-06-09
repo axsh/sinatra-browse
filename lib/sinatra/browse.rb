@@ -5,6 +5,9 @@ require 'sinatra/base'
 Dir["#{File.dirname(__FILE__)}/browse/*.rb"].each {|f| require f }
 
 module Sinatra::Browse
+  #
+  # Main DSL methods
+  #
   def param(name, type, options = {})
     temp_browse_params[name] = options.merge({ type: type })
   end
@@ -19,6 +22,14 @@ module Sinatra::Browse
   end
   alias :param_options :parameter_options
 
+  def describe(description)
+    @_browse_description = description
+  end
+  alias :desc :describe
+
+  #
+  # Internal stuff
+  #
   def temp_browse_params
     @_temp_browse_params ||= reset_temp_params
   end
@@ -34,11 +45,6 @@ module Sinatra::Browse
   def browse_description
     @_browse_description ||= ""
   end
-
-  def describe(description)
-    @_browse_description = description
-  end
-  alias :desc :describe
 
   def browse_routes_for(request_method, path_info)
     browse_routes.values.find { |v| v.matches?(request_method, path_info) }
