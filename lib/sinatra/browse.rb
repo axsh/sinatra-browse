@@ -51,9 +51,9 @@ module Sinatra::Browse
   end
 
   def create_browse_route(request_method,
-                            path_info,
-                            description = browse_description,
-                            new_params = temp_browse_params)
+                          path_info,
+                          description = browse_description,
+                          new_params = temp_browse_params)
 
     new_route = Route.new(request_method,
                           path_info,
@@ -99,15 +99,17 @@ module Sinatra::Browse
 
         browse_route.coerce_type(params)
         browse_route.set_defaults(params)
-        validation_result = browse_route.validate(params)
-        unless validation_result[:success]
-          if validation_result[:on_error].respond_to?(:to_proc)
-            error_proc = validation_result.delete(:on_error).to_proc
-            instance_exec validation_result, &error_proc
+        validation_successful, error_hash = browse_route.validate(params)
+
+        unless validation_successful
+          if error_hash[:on_error].respond_to?(:to_proc)
+            error_proc = error_hash.delete(:on_error).to_proc
+            instance_exec error_hash, &error_proc
           else
-            instance_exec validation_result, &app.default_on_error
+            instance_exec error_hash, &app.default_on_error
           end
         end
+
         browse_route.transform(params)
       end
     end

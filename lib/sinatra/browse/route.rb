@@ -72,7 +72,7 @@ module Sinatra::Browse
         end
       }
 
-      {success: true}
+      true
     end
 
     def transform(params)
@@ -92,7 +92,7 @@ module Sinatra::Browse
     end
 
     def fail_validation(parameter, value, options, reason)
-      {success: false, reason: reason , parameter: parameter, value: value}.merge(options)
+      return false, {reason: reason , parameter: parameter, value: value}.merge(options)
     end
 
     def build_name(request_method, path_info)
