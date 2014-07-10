@@ -13,11 +13,11 @@ module Sinatra::Browse
       "#{request_method}  #{path_info}"
     end
 
-    def initialize(request_method, path_info, description, parameters = nil)
+    def initialize(request_method, path_info, description, declaration_maps = nil)
       @name = build_name(request_method, path_info)
       @match = build_match(request_method, path_info)
       @description = description
-      @param_declarations = build_parameters(parameters || {})
+      @param_declarations = build_declarations(declaration_maps || {})
     end
 
     def to_hash
@@ -64,10 +64,10 @@ module Sinatra::Browse
       /^#{request_method}\s\s#{path_info.gsub(/:[^\/]*/, '[^\/]*')}$/
     end
 
-    def build_parameters(params_hash)
+    def build_declarations(declaration_maps)
       final_params = {}
 
-      params_hash.each do |name, map|
+      declaration_maps.each do |name, map|
         type = map.delete(:type)
 
         final_params[name] = Sinatra::Browse.const_get("#{type}Type").new(name, map)
