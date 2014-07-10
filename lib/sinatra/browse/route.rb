@@ -161,8 +161,10 @@ module Sinatra::Browse
 
     def validate(params)
       @parameters.each do |name, pa|
-        success, error_hash = pa.validate(params)
-        return false, error_hash unless success
+        if params[name]
+          success, error_hash = pa.validate(params)
+          return false, error_hash unless success
+        end
       end
 
       true
