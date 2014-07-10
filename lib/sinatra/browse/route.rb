@@ -8,16 +8,16 @@ module Sinatra::Browse
 
     def initialize(name, map)
       @name = name
-      @default = map[:default]
-      @transform = map[:transform]
+      @default = map.delete(:default)
+      @transform = map.delete(:transform)
 
       @validators = []
-      @@validator_declarations.each do |name, blk|
-        if map.has_key?(name)
+      map.each do |key, value|
+        if val_blk = @@validator_declarations[key]
           @validators << Validator.new(
-            name: name,
-            criteria: map(name),
-            validation_blk: blk
+            name: key,
+            criteria: map[key],
+            validation_blk: val_blk
           )
         end
       end
@@ -47,7 +47,7 @@ module Sinatra::Browse
     def self.validator(name, &blk)
       @@validator_declarations ||= {}
 
-      @@validator_declarations[:name] = blk
+      @@validator_declarations[name] = blk
     end
 
     validator(:depends_on) { |dep| @params.has_key?(dep) }
@@ -58,18 +58,19 @@ module Sinatra::Browse
   class Validator
     attr_reader :criteria
     attr_reader :value
+    attr_reader :name
 
-    def initialize(params)
-      @name = params[:name]
-      @criteria = params[:criteria]
-      @validation_blk = params[:validation_blk]
+    def initialize(map)
+      @name = map[:name]
+      @criteria = map[:criteria]
+      @validation_blk = map[:validation_blk]
     end
 
     def validate(param_name, params)
       @value = params[param_name]
       @params = params
 
-      @validation_blk.call(@criteria)
+      instance_exec @criteria, &@validation_blk
     end
   end
 
@@ -159,27 +160,15 @@ module Sinatra::Browse
     end
 
     def validate(params)
-      @parameters.each { |name, pa| pa.validate(params) }
-      #@parameters.each { |k,v|
-      #  return fail_validation k, params[k], v, :required if !params[k] && v[:required]
-      #  if params[k]
-      #    return fail_validation k, params[k], v, :depends_on if v[:depends_on] && !params[v[:depends_on]]
-      #    return fail_validation k, params[k], v, :in if v[:in] && !v[:in].member?(params[k])
-
-      #    if v[:type] == :String
-      #      return fail_validation k, params[k], v, :format if v[:format] && !(params[k] =~ v[:format])
-      #      return fail_validation k, params[k], v, :min_length if v[:min_length] && params[k].length < v[:min_length]
-      #      return fail_validation k, params[k], v, :max_length if v[:max_length] && params[k].length > v[:max_length]
-      #    end
-      #  end
-      #}
+      @parameters.each do |name, pa|
+        success, error_hash = pa.validate(params)
+        return false, error_hash unless success
+      end
 
       true
     end
 
     def transform(params)
-      #TODO: REimplement
-
       @parameters.each do |name, declaration|
         t = declaration.transform
 
