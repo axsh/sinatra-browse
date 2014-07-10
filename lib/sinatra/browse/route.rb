@@ -85,8 +85,8 @@ module Sinatra::Browse
     end
 
     validator(:format) { |regex| !! (@value =~ regex) }
-    validator(:min_length) { |min_len| @value >= min_len }
-    validator(:max_length) { |max_len| @value <= max_len }
+    validator(:min_length) { |min_len| @value.length >= min_len }
+    validator(:max_length) { |max_len| @value.length <= max_len }
   end
 
   class IntegerDeclaration < ParameterDeclaration
