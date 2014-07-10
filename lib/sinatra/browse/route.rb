@@ -137,8 +137,8 @@ module Sinatra::Browse
       !! (build_name(request_method,path_info) =~ @match)
     end
 
-    def has_parameter?(parameter)
-      @parameters.has_key?(parameter.to_sym)
+    def has_parameter?(name)
+      @parameters.has_key?(name.to_sym)
     end
 
     def coerce_type(params)
@@ -179,10 +179,6 @@ module Sinatra::Browse
     end
 
     private
-    def fail_validation(parameter, value, options, reason)
-      return false, {reason: reason , parameter: parameter, value: value}.merge(options)
-    end
-
     def build_name(request_method, path_info)
       self.class.build_name(request_method, path_info)
     end

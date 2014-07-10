@@ -99,6 +99,7 @@ module Sinatra::Browse
 
         browse_route.coerce_type(params)
         browse_route.set_defaults(params)
+
         validation_successful, error_hash = browse_route.validate(params)
 
         unless validation_successful
