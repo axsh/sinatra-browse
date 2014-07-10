@@ -84,7 +84,7 @@ module Sinatra::Browse
       String(value)
     end
 
-    validator(:format) { |regex| !! @value =~ regex }
+    validator(:format) { |regex| !! (@value =~ regex) }
     validator(:min_length) { |min_len| @value >= min_len }
     validator(:max_length) { |max_len| @value <= max_len }
   end
