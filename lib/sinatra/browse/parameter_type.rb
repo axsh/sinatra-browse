@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
+  def self.parameter_type(name, &blk)
+    const_set "#{name}Type", Class.new(ParameterType, &blk)
+  end
+
   class ParameterType
     attr_reader :name
     attr_reader :default
@@ -61,11 +65,23 @@ module Sinatra::Browse
       }
     end
 
+    #
+    # DSL
+    #
+
+    def self.coerce(&blk)
+      define_method(:coerce) { |value| blk.call(value) }
+    end
+
     def self.validator(name, &blk)
       @@validator_declarations ||= {}
 
       @@validator_declarations[name] = blk
     end
+
+    #
+    # Validators
+    #
 
     # We need a to_s here because the user should be allowed to define dependencies
     # using symbols while the actual keys of the params hash are strings

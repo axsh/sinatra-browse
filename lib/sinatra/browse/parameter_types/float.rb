@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
-  class FloatType < ParameterType
-    def coerce(value)
-      Float(value)
-    end
+  parameter_type(:Float) do
+    coerce { |value| Float(value) }
   end
 end
