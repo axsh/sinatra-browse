@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
-  class IntegerDeclaration < ParameterDeclaration
+  class IntegerType < ParameterType
     def coerce(value)
       Integer(value)
     end

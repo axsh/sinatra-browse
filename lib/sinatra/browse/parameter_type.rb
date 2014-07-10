@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
-  class ParameterDeclaration
+  class ParameterType
     attr_reader :name
     attr_reader :default
     attr_reader :transform

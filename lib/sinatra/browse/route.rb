@@ -105,7 +105,7 @@ module Sinatra::Browse
       params_hash.each do |name, map|
         type = map.delete(:type)
 
-        final_params[name] = Sinatra::Browse.const_get("#{type}Declaration").new(name, map)
+        final_params[name] = Sinatra::Browse.const_get("#{type}Type").new(name, map)
       end
 
       final_params

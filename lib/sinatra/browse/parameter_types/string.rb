@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
-  class StringDeclaration < ParameterDeclaration
+  class StringType < ParameterType
     def coerce(value)
       String(value)
     end

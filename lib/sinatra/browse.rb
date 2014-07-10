@@ -3,7 +3,7 @@
 require 'sinatra/base'
 
 Dir["#{File.dirname(__FILE__)}/browse/*.rb"].each {|f| require f }
-Dir["#{File.dirname(__FILE__)}/browse/parameter_declarations/*.rb"].each do |f|
+Dir["#{File.dirname(__FILE__)}/browse/parameter_types/*.rb"].each do |f|
   require f
 end
 

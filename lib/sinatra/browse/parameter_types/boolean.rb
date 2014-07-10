@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
-  class BooleanDeclaration < ParameterDeclaration
+  class BooleanType < ParameterType
     def coerce(value)
       #TODO: Raise error if it's something else
       case value
