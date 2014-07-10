@@ -4,10 +4,12 @@ module Sinatra::Browse
   class ParameterDeclaration
     attr_reader :name
     attr_reader :default
+    attr_reader :transform
 
     def initialize(name, map)
       @name = name
       @default = map[:default]
+      @transform = map[:transform]
 
       @validators = []
       @@validator_declarations.each do |name, blk|
@@ -95,6 +97,7 @@ module Sinatra::Browse
 
   class BooleanDeclaration < ParameterDeclaration
     def coerce(value)
+      #TODO: Raise error if it's something else
       case value
       when "y", "yes", "t", "true", "1"
         true
@@ -177,9 +180,11 @@ module Sinatra::Browse
     def transform(params)
       #TODO: REimplement
 
-      #@parameters.each { |k,v|
-      #  params[k] = v[:transform].to_proc.call(params[k]) if params[k] && v[:transform]
-      #}
+      @parameters.each do |name, declaration|
+        t = declaration.transform
+
+        params[name] = t.to_proc.call(params[name]) if params[name] && t
+      end
     end
 
     private
