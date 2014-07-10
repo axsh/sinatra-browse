@@ -7,8 +7,6 @@ module Sinatra::Browse
     attr_reader :match
     attr_reader :description
 
-    class ValidationError < Exception; end
-
     # This is here because we're using the name as the keys for the
     # _browse_routes hash. We want to build it outside of this class for that.
     def self.build_name(request_method, path_info)
