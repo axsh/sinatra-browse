@@ -32,41 +32,27 @@ module Sinatra::Browse
       @param_declarations.has_key?(name.to_sym)
     end
 
-    def coerce_type(params)
-      @param_declarations.each { |name, pa| params[name] &&= pa.coerce(params[name]) }
-    end
+    def process(params)
+      @param_declarations.each do |name, pd|
+        params[name] = params[name] || pd.default
 
-    def set_defaults(params)
-      @param_declarations.each { |name, declaration|
-        default = declaration.default
-
-        unless params[name] || default.nil?
-          params[name] = default.is_a?(Proc) ? default.call(params[name]) : default
+        # We specifically check for nil here since a boolean's default can be false
+        if params[name].nil?
+          return false, pd.build_error_hash(:required) if pd.required?
+          next
         end
-      }
+
+        params[name] = pd.coerce(params[name])
+
+        success, error_hash = pd.validate(params)
+        return false, error_hash unless success
+
+        params[name] = pd.transform(params[name])
+      end
     end
 
     def delete_undefined(params, allowed)
       params.delete_if { |i| !(self.has_parameter?(i) || allowed.member?(i)) }
-    end
-
-    def validate(params)
-      @param_declarations.each do |name, pa|
-        if params[name] || pa.required?
-          success, error_hash = pa.validate(params)
-          return false, error_hash unless success
-        end
-      end
-
-      true
-    end
-
-    def transform(params)
-      @param_declarations.each do |name, declaration|
-        t = declaration.transform
-
-        params[name] = t.to_proc.call(params[name]) if params[name] && t
-      end
     end
 
     private

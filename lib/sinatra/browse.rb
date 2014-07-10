@@ -100,10 +100,7 @@ module Sinatra::Browse
           browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
         end
 
-        browse_route.coerce_type(params)
-        browse_route.set_defaults(params)
-
-        validation_successful, error_hash = browse_route.validate(params)
+        validation_successful, error_hash = browse_route.process(params)
 
         unless validation_successful
           if error_hash[:on_error].respond_to?(:to_proc)
@@ -114,7 +111,6 @@ module Sinatra::Browse
           end
         end
 
-        browse_route.transform(params)
       end
     end
 

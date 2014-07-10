@@ -4,12 +4,14 @@ module Sinatra::Browse
   class ParameterType
     attr_reader :name
     attr_reader :default
-    attr_reader :transform
 
     def initialize(name, map)
       @name = name
       @default = map.delete(:default)
+
       @transform = map.delete(:transform)
+      @transform = @transform.to_proc if @transform
+
       @required = !! map[:required]
       @on_error = map.delete(:on_error)
 
@@ -26,6 +28,10 @@ module Sinatra::Browse
 
     end
 
+    def default
+      @default.is_a?(Proc) ? @default.call : @default
+    end
+
     def required?
       @required
     end
@@ -38,10 +44,23 @@ module Sinatra::Browse
       true
     end
 
+    def transform(value)
+      @transform ? @transform.call(value) : value
+    end
+
     def coerce(value)
+      raise NotImplementedError
     end
 
     def build_error_hash(validator)
+      validator = case validator
+      when Validator
+        validator
+      when Symbol
+        #TODO: Change validators to hash to make this faster
+        @validators.find { |v| v.name == validator }
+      end
+
       {
         reason: validator.name,
         parameter: self.name,
@@ -56,7 +75,8 @@ module Sinatra::Browse
       @@validator_declarations[name] = blk
     end
 
-    validator(:depends_on) { |dep| @params.has_key?(dep) }
+    #TODO: Investigate why this didn't work without a to_s
+    validator(:depends_on) { |dep| @params.has_key?(dep.to_s) }
     validator(:required) { |trueclass| !@value.nil? }
     validator(:in) { |possible_values| possible_values.member?(@value) }
   end
