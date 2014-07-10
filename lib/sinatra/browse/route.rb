@@ -17,7 +17,7 @@ module Sinatra::Browse
       @name = build_name(request_method, path_info)
       @match = build_match(request_method, path_info)
       @description = description
-      @param_declarations = build_declarations(declaration_maps || {})
+      build_declarations(declaration_maps || {})
     end
 
     def to_hash
@@ -36,7 +36,7 @@ module Sinatra::Browse
       @param_declarations.each do |name, pd|
         name = name.to_s # The params hash uses strings but declarations use symbols
 
-        params[name] = params[name] || pd.default
+        params[name] ||= pd.default
 
         # We specifically check for nil here since a boolean's default can be false
         if params[name].nil?
@@ -51,6 +51,8 @@ module Sinatra::Browse
 
         params[name] = pd.transform(params[name])
       end
+
+      true
     end
 
     def delete_undefined(params, allowed)
@@ -67,15 +69,13 @@ module Sinatra::Browse
     end
 
     def build_declarations(declaration_maps)
-      final_params = {}
+      @param_declarations = {}
 
       declaration_maps.each do |name, map|
         type = map.delete(:type)
 
-        final_params[name] = Sinatra::Browse.const_get("#{type}Type").new(name, map)
+        @param_declarations[name] = Sinatra::Browse.const_get("#{type}Type").new(name, map)
       end
-
-      final_params
     end
   end
 end
