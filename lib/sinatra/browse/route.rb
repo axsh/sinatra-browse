@@ -34,6 +34,8 @@ module Sinatra::Browse
 
     def process(params)
       @param_declarations.each do |name, pd|
+        name = name.to_s # The params hash uses strings but declarations use symbols
+
         params[name] = params[name] || pd.default
 
         # We specifically check for nil here since a boolean's default can be false

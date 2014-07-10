@@ -67,7 +67,8 @@ module Sinatra::Browse
       @@validator_declarations[name] = blk
     end
 
-    #TODO: Investigate why this didn't work without a to_s
+    # We need a to_s here because the user should be allowed to define dependencies
+    # using symbols while the actual keys of the params hash are strings
     validator(:depends_on) { |dep| @params.has_key?(dep.to_s) }
     validator(:in) { |possible_values| possible_values.member?(@value) }
   end
