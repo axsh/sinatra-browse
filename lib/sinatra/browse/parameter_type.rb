@@ -38,7 +38,7 @@ module Sinatra::Browse
 
     def validate(params)
       @validators.each do |v|
-        return false, build_error_hash(v) unless v.validate(self.name, params)
+        return false, build_error_hash(v.name, v.value) unless v.validate(self.name, params)
       end
 
       true
@@ -52,19 +52,11 @@ module Sinatra::Browse
       raise NotImplementedError
     end
 
-    def build_error_hash(validator)
-      validator = case validator
-      when Validator
-        validator
-      when Symbol
-        #TODO: Change validators to hash to make this faster
-        @validators.find { |v| v.name == validator }
-      end
-
+    def build_error_hash(reason, value)
       {
-        reason: validator.name,
+        reason: reason,
         parameter: self.name,
-        value: validator.value,
+        value: value,
         on_error: @on_error
       }
     end
@@ -77,7 +69,6 @@ module Sinatra::Browse
 
     #TODO: Investigate why this didn't work without a to_s
     validator(:depends_on) { |dep| @params.has_key?(dep.to_s) }
-    validator(:required) { |trueclass| !@value.nil? }
     validator(:in) { |possible_values| possible_values.member?(@value) }
   end
 end

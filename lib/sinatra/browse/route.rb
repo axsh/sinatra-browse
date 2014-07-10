@@ -38,7 +38,7 @@ module Sinatra::Browse
 
         # We specifically check for nil here since a boolean's default can be false
         if params[name].nil?
-          return false, pd.build_error_hash(:required) if pd.required?
+          return false, pd.build_error_hash(:required, nil) if pd.required?
           next
         end
 
