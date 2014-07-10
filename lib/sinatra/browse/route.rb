@@ -17,11 +17,11 @@ module Sinatra::Browse
       @name = build_name(request_method, path_info)
       @match = build_match(request_method, path_info)
       @description = description
-      @parameters = build_parameters(parameters || {})
+      @param_declarations = build_parameters(parameters || {})
     end
 
     def to_hash
-      {name: @name, description: @description}.merge @parameters
+      {name: @name, description: @description}.merge @param_declarations
     end
 
     def matches?(request_method, path_info)
@@ -29,15 +29,15 @@ module Sinatra::Browse
     end
 
     def has_parameter?(name)
-      @parameters.has_key?(name.to_sym)
+      @param_declarations.has_key?(name.to_sym)
     end
 
     def coerce_type(params)
-      @parameters.each { |name, pa| params[name] &&= pa.coerce(params[name]) }
+      @param_declarations.each { |name, pa| params[name] &&= pa.coerce(params[name]) }
     end
 
     def set_defaults(params)
-      @parameters.each { |name, declaration|
+      @param_declarations.each { |name, declaration|
         default = declaration.default
 
         unless params[name] || default.nil?
@@ -51,7 +51,7 @@ module Sinatra::Browse
     end
 
     def validate(params)
-      @parameters.each do |name, pa|
+      @param_declarations.each do |name, pa|
         if params[name] || pa.required?
           success, error_hash = pa.validate(params)
           return false, error_hash unless success
@@ -62,7 +62,7 @@ module Sinatra::Browse
     end
 
     def transform(params)
-      @parameters.each do |name, declaration|
+      @param_declarations.each do |name, declaration|
         t = declaration.transform
 
         params[name] = t.to_proc.call(params[name]) if params[name] && t
