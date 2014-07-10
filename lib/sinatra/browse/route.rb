@@ -10,6 +10,7 @@ module Sinatra::Browse
       @name = name
       @default = map.delete(:default)
       @transform = map.delete(:transform)
+      @required = !! map[:required]
 
       @validators = []
       map.each do |key, value|
@@ -22,6 +23,10 @@ module Sinatra::Browse
         end
       end
 
+    end
+
+    def required?
+      @required
     end
 
     def validate(params)
@@ -161,7 +166,7 @@ module Sinatra::Browse
 
     def validate(params)
       @parameters.each do |name, pa|
-        if params[name]
+        if params[name] || pa.required?
           success, error_hash = pa.validate(params)
           return false, error_hash unless success
         end
