@@ -11,6 +11,7 @@ module Sinatra::Browse
       @default = map.delete(:default)
       @transform = map.delete(:transform)
       @required = !! map[:required]
+      @on_error = map.delete(:on_error)
 
       @validators = []
       map.each do |key, value|
@@ -45,7 +46,7 @@ module Sinatra::Browse
         reason: validator.name,
         parameter: self.name,
         value: validator.value,
-        #TODO: Fill this in further
+        on_error: @on_error
       }
     end
 
