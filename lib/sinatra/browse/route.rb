@@ -2,7 +2,7 @@
 
 module Sinatra::Browse
   class Route
-    attr_reader :parameters
+    attr_reader :param_declarations
     attr_reader :name
     attr_reader :match
     attr_reader :description
