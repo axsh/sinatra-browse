@@ -30,7 +30,7 @@ module Sinatra::Browse
     end
 
     def generate
-      Erb.new(@template).result
+      ERB.new(@template).result(binding)
     end
   end
 
