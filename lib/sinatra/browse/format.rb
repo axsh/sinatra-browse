@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 require 'yaml'
+require 'erb'
 
 module Sinatra::Browse
   def self.format(f, browse_routes)
@@ -11,12 +12,25 @@ module Sinatra::Browse
       JSON.new(browse_routes)
     when "yaml"
       YAML.new(browse_routes)
+    when "markdown"
+      ErbTemplate.new(browse_routes, "markdown.erb")
     end
   end
 
   class BrowseFormat
     def initialize(browse_routes)
       @browse_routes = browse_routes
+    end
+  end
+
+  class ErbTemplate < BrowseFormat
+    def initialize(browse_routes, filename)
+      super(browse_routes)
+      @template = File.read(File.dirname(__FILE__) + "/formats/" + filename)
+    end
+
+    def generate
+      Erb.new(@template).result
     end
   end
 
