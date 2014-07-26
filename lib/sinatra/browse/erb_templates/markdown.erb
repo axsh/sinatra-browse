@@ -1,0 +1,7 @@
+<% @browse_routes.each do |name, route| %>
+  # <%= name %>
+
+  <% route.param_declarations.each do |name, param| %>
+  * <%= param.name %>
+  <% end %>
+<% end %>
