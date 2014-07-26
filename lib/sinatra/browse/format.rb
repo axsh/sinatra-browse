@@ -6,8 +6,8 @@ require 'erb'
 module Sinatra::Browse
   def self.format(f, browse_routes)
     case f
-    when "kusohtml"
-      KusoHtml.new(browse_routes)
+    when "html"
+      ErbTemplate.new(browse_routes, "html.erb")
     when "json"
       JSON.new(browse_routes)
     when "yaml"
@@ -31,21 +31,6 @@ module Sinatra::Browse
 
     def generate
       ERB.new(@template).result(binding)
-    end
-  end
-
-  class KusoHtml < BrowseFormat
-    def generate
-      output = ""
-      @browse_routes.each { |name, route|
-        output += "<h3>#{name}</h3>"
-        output += "<p>#{route.description}</p><ul>"
-        route.parameters.each { |param_key, param_value|
-          output += "<li>#{param_key} #{param_value.to_s}</li>"
-        }
-        output += "</ul>"
-      }
-      output
     end
   end
 

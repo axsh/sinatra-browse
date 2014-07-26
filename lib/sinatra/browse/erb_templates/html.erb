@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <% @browse_routes.each do |name, route| %>
+      <h1><%= name %></h1>
+
+      <ul>
+      <% route.param_declarations.each do |name, param| %>
+        <li><%= param.name %></li>
+      <% end %>
+      </ul>
+    <% end %>
+  </body>
+</html>
