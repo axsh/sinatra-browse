@@ -24,6 +24,8 @@ module Sinatra::Browse
   end
 
   class ErbTemplate < BrowseFormat
+    include ERB::Util
+
     def initialize(browse_routes, filename)
       super(browse_routes)
       @template = File.read(File.dirname(__FILE__) + "/erb_templates/" + filename)

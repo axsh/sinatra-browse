@@ -8,6 +8,7 @@ module Sinatra::Browse
   class ParameterType
     attr_reader :name
     attr_reader :default
+    attr_reader :validators
 
     def initialize(name, map)
       @name = name
@@ -63,6 +64,11 @@ module Sinatra::Browse
         value: value,
         on_error: @on_error
       }
+    end
+
+    def type
+      type_string = self.class.to_s.split("::").last
+      type_string[0, type_string.size - 4]
     end
 
     #
