@@ -39,6 +39,11 @@ describe "sinatra-browse" do
           :default => 11
         })
       end
+
+      it "shows 'dynamically generated' for procs" do
+        b = YAML.load(last_response.body)
+        expect(b[4][:parameters][0][:default]).to eq "dynamically generated"
+      end
     end
 
     context "in json" do
@@ -60,6 +65,10 @@ describe "sinatra-browse" do
           "required" => false,
           "default" => 11
         })
+      end
+
+      it "shows 'dynamically generated' for procs" do
+        expect(body[4]["parameters"][0]["default"]).to eq "dynamically generated"
       end
     end
   end
