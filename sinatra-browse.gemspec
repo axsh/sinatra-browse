@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'sinatra-browse'
-  s.version     = '0.4'
-  s.date        = '2014-05-14'
+  s.version     = '0.5'
+  s.date        = '2014-07-28'
   s.summary     = 'Parameter declaration framework and browsable API for Sinatra'
   s.description = s.summary
   s.authors     = ['Axsh Co. LTD']
