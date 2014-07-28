@@ -115,7 +115,7 @@ module Sinatra::Browse
     end
 
     app.describe "Displays this browsable API."
-    app.param :format, :String, in: ["html", "json", "yaml"], default: "html"
+    app.param :format, :String, in: ["html", "json", "yaml", "yml"], default: "html"
     app.get '/browse' do
       Sinatra::Browse.format(params["format"], app.browse_routes).generate
     end

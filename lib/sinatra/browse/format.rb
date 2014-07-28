@@ -10,7 +10,7 @@ module Sinatra::Browse
       ErbTemplate.new(browse_routes, "html.erb")
     when "json"
       JSON.new(browse_routes)
-    when "yaml"
+    when "yaml", "yml"
       YAML.new(browse_routes)
     when "markdown"
       ErbTemplate.new(browse_routes, "markdown.erb")
