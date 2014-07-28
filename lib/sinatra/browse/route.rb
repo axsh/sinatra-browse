@@ -21,7 +21,26 @@ module Sinatra::Browse
     end
 
     def to_hash
-      {name: @name, description: @description}.merge @param_declarations
+      param_hashes = @param_declarations.map do |name, pd|
+        h = {
+          name: pd.name,
+          type: pd.type,
+          required: pd.required?,
+          default: pd.default
+        }
+
+        pd.validators.each do |v|
+          h[v.name.to_sym] = v.criteria
+        end
+
+        h
+      end
+
+      {
+        name: @name,
+        description: @description,
+        parameters: param_hashes
+      }
     end
 
     def matches?(request_method, path_info)
