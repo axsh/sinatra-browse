@@ -20,11 +20,11 @@ module Sinatra::Browse
       build_declarations(declaration_maps || {})
     end
 
-    def to_hash
+    def to_hash(options = {})
       {
         route: @name,
         description: @description,
-        parameters: @param_declarations.map { |name, pd| pd.to_hash }
+        parameters: @param_declarations.map { |name, pd| pd.to_hash(options) }
       }
     end
 

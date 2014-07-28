@@ -38,13 +38,13 @@ module Sinatra::Browse
 
   class JSON < BrowseFormat
     def generate
-      @browse_routes.values.map { |br| br.to_hash }.to_json
+      @browse_routes.values.map { |br| br.to_hash(noprocs: true) }.to_json
     end
   end
 
   class YAML < BrowseFormat
     def generate
-      @browse_routes.values.map { |br| br.to_hash }.to_yaml
+      @browse_routes.values.map { |br| br.to_hash(noprocs: true) }.to_yaml
     end
   end
 end
