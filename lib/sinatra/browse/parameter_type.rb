@@ -71,6 +71,19 @@ module Sinatra::Browse
       type_string[0, type_string.size - 4]
     end
 
+    def to_hash
+      h = {
+        name: @name,
+        type: type,
+        required: required?,
+      }
+
+      h[:default] = @default if @default
+      @validators.each { |v| h[v.name.to_sym] = v.criteria }
+
+      h
+    end
+
     #
     # DSL
     #

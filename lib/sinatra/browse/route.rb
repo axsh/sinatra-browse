@@ -21,25 +21,10 @@ module Sinatra::Browse
     end
 
     def to_hash
-      param_hashes = @param_declarations.map do |name, pd|
-        h = {
-          name: pd.name,
-          type: pd.type,
-          required: pd.required?,
-          default: pd.default
-        }
-
-        pd.validators.each do |v|
-          h[v.name.to_sym] = v.criteria
-        end
-
-        h
-      end
-
       {
-        name: @name,
+        route: @name,
         description: @description,
-        parameters: param_hashes
+        parameters: @param_declarations.map { |name, pd| pd.to_hash }
       }
     end
 
