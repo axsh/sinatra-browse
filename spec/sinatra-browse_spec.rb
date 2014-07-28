@@ -6,6 +6,49 @@ describe "sinatra-browse" do
   def body; JSON.parse(last_response.body) end
   def status; last_response.status end
 
+  describe "browsable api" do
+    before(:each) { get("browse", format: format) }
+
+    context "in html" do
+      let(:format) { "html" }
+
+      it "doesn't crash when calling it" do
+        expect(status).to eq 200
+      end
+    end
+
+    context "in yaml" do
+      let(:format) { "yml" }
+
+      it "returns the api documentation in yaml format" do
+        puts last_response.body
+        b = YAML.load(last_response.body)
+      end
+    end
+
+    context "in json" do
+      let(:format) { "json" }
+
+      it "returns the api documentation in json format" do
+        expect(body[3]["route"]).to eq "GET  /features/default"
+
+        expect(body[3]["parameters"][0]).to eq({
+          "name" => "a",
+          "type" => "String",
+          "required" => false,
+          "default" => "yay"
+        })
+
+        expect(body[3]["parameters"][1]).to eq({
+          "name" => "b",
+          "type" => "Integer",
+          "required" => false,
+          "default" => 11
+        })
+      end
+    end
+  end
+
   it "throws away parameters that weren't defined" do
     get("features/remove_undefined", a: "a", b: "b", c: "c")
 
