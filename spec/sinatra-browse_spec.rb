@@ -272,7 +272,7 @@ describe "sinatra-browse" do
   end
 
   describe "depends_on" do
-    it "accepts paramter 'a' only when parameter 'b' is also present" do
+    it "accepts parameter 'a' only when parameter 'b' is also present" do
       get("features/depends_on", a: "lol")
       expect(status).to eq 400
       get("features/depends_on", a: "lol", b: "lul")
