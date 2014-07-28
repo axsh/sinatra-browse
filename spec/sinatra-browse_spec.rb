@@ -21,8 +21,23 @@ describe "sinatra-browse" do
       let(:format) { "yml" }
 
       it "returns the api documentation in yaml format" do
-        puts last_response.body
         b = YAML.load(last_response.body)
+
+        expect(b[3][:route]).to eq "GET  /features/default"
+
+        expect(b[3][:parameters][0]).to eq({
+          :name => :a,
+          :type => :String,
+          :required => false,
+          :default => "yay"
+        })
+
+        expect(b[3][:parameters][1]).to eq({
+          :name => :b,
+          :type => :Integer,
+          :required => false,
+          :default => 11
+        })
       end
     end
 
