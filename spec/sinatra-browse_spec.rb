@@ -6,6 +6,73 @@ describe "sinatra-browse" do
   def body; JSON.parse(last_response.body) end
   def status; last_response.status end
 
+  describe "browsable api" do
+    before(:each) { get("browse", format: format) }
+
+    context "in html" do
+      let(:format) { "html" }
+
+      it "doesn't crash when calling it" do
+        expect(status).to eq 200
+      end
+    end
+
+    context "in yaml" do
+      let(:format) { "yml" }
+
+      it "returns the api documentation in yaml format" do
+        b = YAML.load(last_response.body)
+
+        expect(b[3][:route]).to eq "GET  /features/default"
+
+        expect(b[3][:parameters][0]).to eq({
+          :name => :a,
+          :type => :String,
+          :required => false,
+          :default => "yay"
+        })
+
+        expect(b[3][:parameters][1]).to eq({
+          :name => :b,
+          :type => :Integer,
+          :required => false,
+          :default => 11
+        })
+      end
+
+      it "shows 'dynamically generated' for procs" do
+        b = YAML.load(last_response.body)
+        expect(b[4][:parameters][0][:default]).to eq "dynamically generated"
+      end
+    end
+
+    context "in json" do
+      let(:format) { "json" }
+
+      it "returns the api documentation in json format" do
+        expect(body[3]["route"]).to eq "GET  /features/default"
+
+        expect(body[3]["parameters"][0]).to eq({
+          "name" => "a",
+          "type" => "String",
+          "required" => false,
+          "default" => "yay"
+        })
+
+        expect(body[3]["parameters"][1]).to eq({
+          "name" => "b",
+          "type" => "Integer",
+          "required" => false,
+          "default" => 11
+        })
+      end
+
+      it "shows 'dynamically generated' for procs" do
+        expect(body[4]["parameters"][0]["default"]).to eq "dynamically generated"
+      end
+    end
+  end
+
   it "throws away parameters that weren't defined" do
     get("features/remove_undefined", a: "a", b: "b", c: "c")
 
@@ -272,7 +339,7 @@ describe "sinatra-browse" do
   end
 
   describe "depends_on" do
-    it "accepts paramter 'a' only when parameter 'b' is also present" do
+    it "accepts parameter 'a' only when parameter 'b' is also present" do
       get("features/depends_on", a: "lol")
       expect(status).to eq 400
       get("features/depends_on", a: "lol", b: "lul")

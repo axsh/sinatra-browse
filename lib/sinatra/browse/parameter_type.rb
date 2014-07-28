@@ -8,6 +8,7 @@ module Sinatra::Browse
   class ParameterType
     attr_reader :name
     attr_reader :default
+    attr_reader :validators
 
     def initialize(name, map)
       @name = name
@@ -63,6 +64,31 @@ module Sinatra::Browse
         value: value,
         on_error: @on_error
       }
+    end
+
+    def type
+      type_string = self.class.to_s.split("::").last
+      type_string[0, type_string.size - 4].to_sym
+    end
+
+    def to_hash(options = {})
+      h = {
+        name: @name,
+        type: type,
+        required: required?,
+      }
+
+      if @default
+        h[:default] = if @default.is_a?(Proc) && options[:noprocs]
+          "dynamically generated"
+        else
+          @default
+        end
+      end
+
+      @validators.each { |v| h[v.name.to_sym] = v.criteria }
+
+      h
     end
 
     #

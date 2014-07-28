@@ -20,8 +20,12 @@ module Sinatra::Browse
       build_declarations(declaration_maps || {})
     end
 
-    def to_hash
-      {name: @name, description: @description}.merge @param_declarations
+    def to_hash(options = {})
+      {
+        route: @name,
+        description: @description,
+        parameters: @param_declarations.map { |name, pd| pd.to_hash(options) }
+      }
     end
 
     def matches?(request_method, path_info)

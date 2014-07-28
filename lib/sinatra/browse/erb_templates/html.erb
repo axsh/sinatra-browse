@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <% @browse_routes.each do |name, route| %>
+      <h1><%= name %></h1>
+
+      <p><%= route.description %></p>
+
+      <% unless route.param_declarations.empty? %>
+        <h2>Parameters</h2>
+
+        <dl>
+        <% route.param_declarations.each do |name, param| %>
+          <dt><%= param.name %></dt>
+
+          <% if param.required? %>
+            <dd>Required</dd>
+          <% end %>
+
+          <dd>Type: <%= param.type %></dd>
+
+          <% if param.default %>
+            <dd>Default: <%= param.default %></dd>
+          <% end %>
+
+          <% param.validators.each do |v| %>
+            <dd><%= v.name %>: <%= h v.criteria %></dd>
+          <% end %>
+
+        <% end %>
+        </dl>
+      <% end %>
+    <% end %>
+  </body>
+</html>

@@ -6,11 +6,11 @@ require 'erb'
 module Sinatra::Browse
   def self.format(f, browse_routes)
     case f
-    when "kusohtml"
-      KusoHtml.new(browse_routes)
+    when "html"
+      ErbTemplate.new(browse_routes, "html.erb")
     when "json"
       JSON.new(browse_routes)
-    when "yaml"
+    when "yaml", "yml"
       YAML.new(browse_routes)
     when "markdown"
       ErbTemplate.new(browse_routes, "markdown.erb")
@@ -24,6 +24,8 @@ module Sinatra::Browse
   end
 
   class ErbTemplate < BrowseFormat
+    include ERB::Util
+
     def initialize(browse_routes, filename)
       super(browse_routes)
       @template = File.read(File.dirname(__FILE__) + "/erb_templates/" + filename)
@@ -34,30 +36,15 @@ module Sinatra::Browse
     end
   end
 
-  class KusoHtml < BrowseFormat
-    def generate
-      output = ""
-      @browse_routes.each { |name, route|
-        output += "<h3>#{name}</h3>"
-        output += "<p>#{route.description}</p><ul>"
-        route.parameters.each { |param_key, param_value|
-          output += "<li>#{param_key} #{param_value.to_s}</li>"
-        }
-        output += "</ul>"
-      }
-      output
-    end
-  end
-
   class JSON < BrowseFormat
     def generate
-      @browse_routes.values.map { |br| br.to_hash }.to_json
+      @browse_routes.values.map { |br| br.to_hash(noprocs: true) }.to_json
     end
   end
 
   class YAML < BrowseFormat
     def generate
-      @browse_routes.values.map { |br| br.to_hash }.to_yaml
+      @browse_routes.values.map { |br| br.to_hash(noprocs: true) }.to_yaml
     end
   end
 end
