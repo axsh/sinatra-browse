@@ -2,8 +2,7 @@
 
 require "spec_helper"
 
-describe "sinatra-browse" do
-
+describe "general behaviour" do
   it "throws away parameters that weren't defined" do
     get("features/remove_undefined", a: "a", b: "b", c: "c")
 
@@ -16,5 +15,4 @@ describe "sinatra-browse" do
     get("i_dont_exist")
     expect(last_response.errors).to be_empty
   end
-
 end
