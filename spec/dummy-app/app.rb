@@ -93,6 +93,8 @@ class App < Sinatra::Base
 
   param :single_digit, :Integer, in: 1..9
   param :first_ten_primes, :Integer, in: Prime.take(10)
+  param :min_test, :Integer, min: 10
+  param :max_test, :Integer, max: 20
   get "/features/integer_validation" do
     params.to_json
   end
