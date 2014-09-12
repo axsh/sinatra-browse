@@ -62,6 +62,16 @@ param :media_type, :String, default: "book"
 param :year, :Integer, default: lambda { Time.now.year }
 ```
 
+## Describing parameters
+
+Parameters declarations can have an optional arbitrary discription to be included in the generated documentation.
+
+```ruby
+# Both of these syntaxes will work.
+param :name, :Name, description: "What your mother calls you."
+param :age, :Integer, desc: "The amount of years you've spent on this planet."
+```
+
 ## Parameter validation
 
 You can write some quick validation logic directly in the parameter declaration. If the validation fails, either a standard 400 error will be returned or a custom error block will execute if provided.
