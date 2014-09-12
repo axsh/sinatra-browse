@@ -40,11 +40,9 @@ The syntax is inspired by the [sinatra-param](https://github.com/mattt/sinatra-p
 
 **Browsable API**
 
-Sinatra-browse allows you to surf to your API. This works as documentation and allows you to send requests and see their responses directly in your browser.
+Sinatra-browse automatically adds another route simply called `browse`. Surfing to it will display documentation generated from the parameter definitions.
 
     http://<api_ip_address>:<api_port>/browse
-
-*Remark:* This is still work in progress. Right now the page only shows some simple documentation.
 
 ## Parameter types
 
