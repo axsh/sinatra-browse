@@ -88,6 +88,22 @@ param :small_prime_number, :Integer, in: Prime.take(10)
 param :order, :String, in: ["ascending", "descending"]
 ```
 
+### Integer validation
+
+The following parameter validators can only be used for parameters of type `:Integer`.
+
+`min` The integer must be greater than or equal to this.
+
+```ruby
+param :min_example, :Integer, min: 128
+```
+
+`max` The integer must be lesser than or equal to this.
+
+```ruby
+param :max_example, :Integer, max: 90_000
+```
+
 ### String validation
 
 The following parameter validators can only be used for parameters of type `:String`.
