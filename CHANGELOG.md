@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6
+
+* New Integer validation: min and max
+* Allow arbitrary parameter descriptions
+
 ## v0.5
 
 * A lot of code cleanup.
