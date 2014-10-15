@@ -77,8 +77,9 @@ module Sinatra::Browse
 
       declaration_maps.each do |name, map|
         type = map.delete(:type)
+        type_class = Sinatra::Browse::ParameterTypes.const_get(type)
 
-        @param_declarations[name] = Sinatra::Browse.const_get("#{type}Type").new(name, map)
+        @param_declarations[name] = type_class.new(name, map)
       end
     end
   end
