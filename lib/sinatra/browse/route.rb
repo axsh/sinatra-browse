@@ -79,6 +79,10 @@ module Sinatra::Browse
         type = map.delete(:type)
         type_class = Sinatra::Browse::ParameterTypes.const_get(type)
 
+        unless type_class.is_a?(Class) && type_class.ancestors.member?(ParameterType)
+          raise Errors::UnknownParameterTypeError, type_class
+        end
+
         @param_declarations[name] = type_class.new(name, map)
       end
     end
