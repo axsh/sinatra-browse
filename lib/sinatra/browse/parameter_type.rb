@@ -65,7 +65,7 @@ module Sinatra::Browse
 
     def type
       type_string = self.class.to_s.split("::").last
-      type_string[0, type_string.size - 4].to_sym
+      type_string.to_sym
     end
 
     def to_hash(options = {})
