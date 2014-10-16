@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.6
+
+* Added min/max validators to the :Integer and :Float types.
+* Fixed a bug where files some times got required in the wrong order.
+
 ## v0.5
 
 * A lot of code cleanup.
