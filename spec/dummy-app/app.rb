@@ -113,6 +113,8 @@ class App < Sinatra::Base
   min_max_test_params(:DateTime,
                       DateTime.ordinal(2001,34,4,5,6,'+7'),
                       DateTime.ordinal(2005,34,4,5,6,'+7'))
+  param :string_min, :DateTime, min: '2014/02/05'
+  param :string_max, :DateTime, max: '2001-02-03T04:05:06.123456789+07:00'
   get "/features/date_time_validation" do
     params.to_json
   end
