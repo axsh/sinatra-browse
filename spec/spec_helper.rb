@@ -10,6 +10,7 @@ def body; JSON.parse(last_response.body) end
 def status; last_response.status end
 
 require_relative 'shared_examples/min_max_validation'
+require_relative 'shared_examples/in_validation'
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods
