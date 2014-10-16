@@ -56,6 +56,11 @@ class App < Sinatra::Base
 
   before { content_type :json }
 
+  def self.min_max_test_params(type, min = 10, max = 20)
+    param :min_test, type, min: min
+    param :max_test, type, max: max
+  end
+
   param :a, :String
   param :b, :String
   get "/features/remove_undefined" do
@@ -93,9 +98,13 @@ class App < Sinatra::Base
 
   param :single_digit, :Integer, in: 1..9
   param :first_ten_primes, :Integer, in: Prime.take(10)
-  param :min_test, :Integer, min: 10
-  param :max_test, :Integer, max: 20
+  min_max_test_params(:Integer)
   get "/features/integer_validation" do
+    params.to_json
+  end
+
+  min_max_test_params(:Float, 10.3, 5.6)
+  get "/features/float_validation" do
     params.to_json
   end
 
