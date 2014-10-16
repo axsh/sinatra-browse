@@ -26,5 +26,6 @@ shared_examples "a parameter type with 'in' validation" do |options|
         expect(status).to eq 400
       end
     end
+
   end
 end
