@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
-  parameter_type(:Float) do
-    coerce { |value| Float(value) }
+  module ParameterTypes
+
+    class Float < ParameterType
+      extend MinMax
+
+      def coerce(value)
+        Float(value)
+      end
+    end
+
   end
 end

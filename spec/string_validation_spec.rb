@@ -3,24 +3,12 @@
 require "spec_helper"
 
 describe "String validation" do
-  describe "in" do
-    context "with a value present the array provided" do
-      it "allows the parameter to go through" do
-        get("features/string_validation", in: "joske")
-        expect(body['in']).to eq('joske')
-        get("features/string_validation", in: "jefke")
-        expect(body['in']).to eq('jefke')
-      end
-    end
-
-    context "with a value not present in the array provided" do
-      it "fails with a 400 status" do
-        get("features/string_validation", in: "jantje")
-        expect(status).to eq 400
-        #TODO: Check for error message?
-      end
-    end
-  end
+  it_behaves_like "a parameter type with 'in' validation", {
+    test_route: 'features/string_validation',
+    in_key: :in,
+    in_value: ['joske', 'jefke'],
+    fail_value: 'jantje'
+  }
 
   describe "format" do
     context "with a string matching the format" do

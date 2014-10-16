@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
-  def self.parameter_type(name, &blk)
-    const_set "#{name}Type", Class.new(ParameterType, &blk)
-  end
-
   class ParameterType
     attr_reader :name
     attr_reader :default
@@ -21,6 +17,7 @@ module Sinatra::Browse
       @on_error = map.delete(:on_error)
 
       @validators = []
+
       map.each do |key, value|
         if val_blk = @@validator_declarations[key]
           @validators << Validator.new(
@@ -68,7 +65,7 @@ module Sinatra::Browse
 
     def type
       type_string = self.class.to_s.split("::").last
-      type_string[0, type_string.size - 4].to_sym
+      type_string.to_sym
     end
 
     def to_hash(options = {})
@@ -95,10 +92,6 @@ module Sinatra::Browse
     # DSL
     #
 
-    def self.coerce(&blk)
-      define_method(:coerce) { |value| blk.call(value) }
-    end
-
     def self.validator(name, &blk)
       @@validator_declarations ||= {}
 
@@ -106,7 +99,7 @@ module Sinatra::Browse
     end
 
     #
-    # Validators
+    # Global validators
     #
 
     # We need a to_s here because the user should be allowed to define dependencies
