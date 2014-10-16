@@ -15,4 +15,12 @@ describe "general behaviour" do
     get("i_dont_exist")
     expect(last_response.errors).to be_empty
   end
+
+  context "when trying to use validators that don't exist" do
+    it "ignores them" do
+      get "features/non_existant_validator", a: 12
+      expect(status).to eq 200
+      expect(body["a"]).to eq 12
+    end
+  end
 end
