@@ -21,7 +21,6 @@ module Sinatra::Browse
 
       def coerce(value)
         # Call parse on ruby's DateTime class rather than the parameter type
-        p value
         ::DateTime.parse(value)
       end
     end
