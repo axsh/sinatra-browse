@@ -16,3 +16,17 @@ RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.formatter = :documentation
 end
+
+module ExampleHelpers
+  def it_works_fine_and_dandy
+    it "works fine and dandy" do
+      expect(status).to eq 200
+    end
+  end
+
+  def it_fails_with_400_status
+    it "fails with a 400 status" do
+      expect(status).to eq 400
+    end
+  end
+end

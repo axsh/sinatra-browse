@@ -1,19 +1,5 @@
 # -*- coding: utf-8 -*-
 
-module MinMaxHelpers
-  def it_works_fine_and_dandy
-    it "works fine and dandy" do
-      expect(status).to eq 200
-    end
-  end
-
-  def it_fails_with_400_status
-    it "fails with a 400 status" do
-      expect(status).to eq 400
-    end
-  end
-end
-
 shared_examples "a parameter type with min/max validation" do |options|
   test_route = options[:test_route]
   min_key = options[:minimum_value].first.first
@@ -22,7 +8,7 @@ shared_examples "a parameter type with min/max validation" do |options|
   max_val = options[:maximum_value].first.last
 
   describe "Minimum/Maximum value validation" do
-    extend MinMaxHelpers
+    extend ExampleHelpers
 
     before(:each) { get("features/#{test_route}", params) }
 
