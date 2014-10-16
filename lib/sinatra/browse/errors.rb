@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-module Sinatra::Browse
-  module Errors
-    class UnknownParameterError < Exception; end
-  end
+module Sinatra::Browse::Errors
+  class UnknownParameterError < Exception; end
+  class UnknownParameterTypeError < Exception; end
 end

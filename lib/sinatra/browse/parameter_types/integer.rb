@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
-  parameter_type(:Integer) do
-    coerce { |value| Integer(value) }
+  module ParameterTypes
 
-    validator(:min) { |min| @value >= min }
-    validator(:max) { |max| @value <= max }
+    class Integer < ParameterType
+      extend MinMax
+
+      def coerce(value)
+        Integer(value)
+      end
+    end
+
   end
 end

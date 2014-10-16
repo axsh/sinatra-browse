@@ -2,12 +2,30 @@
 
 require 'sinatra/base'
 
-Dir["#{File.dirname(__FILE__)}/browse/*.rb"].each {|f| require f }
-Dir["#{File.dirname(__FILE__)}/browse/parameter_types/*.rb"].each do |f|
-  require f
-end
-
 module Sinatra::Browse
+  #
+  # Load other files
+  #
+  require_relative 'browse/format'
+  require_relative 'browse/parameter_type'
+  require_relative 'browse/route'
+  require_relative 'browse/validator'
+
+  module Errors
+    require_relative 'browse/errors'
+  end
+
+  module ParameterTypes
+    module MinMax
+      require_relative 'browse/parameter_types/min_max'
+    end
+
+    require_relative 'browse/parameter_types/boolean'
+    require_relative 'browse/parameter_types/float'
+    require_relative 'browse/parameter_types/integer'
+    require_relative 'browse/parameter_types/string'
+  end
+
   #
   # Main DSL methods
   #
