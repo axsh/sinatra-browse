@@ -40,11 +40,9 @@ The syntax is inspired by the [sinatra-param](https://github.com/mattt/sinatra-p
 
 **Browsable API**
 
-Sinatra-browse allows you to surf to your API. This works as documentation and allows you to send requests and see their responses directly in your browser.
+Sinatra-browse automatically adds another route simply called `browse`. Surfing to it will display documentation generated from the parameter definitions.
 
     http://<api_ip_address>:<api_port>/browse
-
-*Remark:* This is still work in progress. Right now the page only shows some simple documentation.
 
 ## Parameter types
 
@@ -62,6 +60,16 @@ You can set default values in your declarations. These will be used when the par
 ```ruby
 param :media_type, :String, default: "book"
 param :year, :Integer, default: lambda { Time.now.year }
+```
+
+## Describing parameters
+
+Parameters declarations can have an optional arbitrary discription to be included in the generated documentation.
+
+```ruby
+# Both of these syntaxes will work.
+param :name, :Name, description: "What your mother calls you."
+param :age, :Integer, desc: "The amount of years you've spent on this planet."
 ```
 
 ## Parameter validation
@@ -88,6 +96,22 @@ param :password, :String
 param :single_digit, :Integer, in: 1..9
 param :small_prime_number, :Integer, in: Prime.take(10)
 param :order, :String, in: ["ascending", "descending"]
+```
+
+### Integer validation
+
+The following parameter validators can only be used for parameters of type `:Integer`.
+
+`min` The integer must be greater than or equal to this.
+
+```ruby
+param :min_example, :Integer, min: 128
+```
+
+`max` The integer must be lesser than or equal to this.
+
+```ruby
+param :max_example, :Integer, max: 90_000
 ```
 
 ### String validation

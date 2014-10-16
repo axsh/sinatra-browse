@@ -5,10 +5,13 @@ module Sinatra::Browse
     attr_reader :name
     attr_reader :default
     attr_reader :validators
+    attr_reader :description
 
     def initialize(name, map)
       @name = name
       @default = map.delete(:default)
+
+      @description = map.delete(:description) || map.delete(:desc)
 
       @transform = map.delete(:transform)
       @transform = @transform.to_proc if @transform

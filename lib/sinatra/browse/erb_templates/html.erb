@@ -13,6 +13,10 @@
         <% route.param_declarations.each do |name, param| %>
           <dt><%= param.name %></dt>
 
+          <% if param.description %>
+            <dd><%= param.description %><dd>
+          <% end %>
+
           <% if param.required? %>
             <dd>Required</dd>
           <% end %>
