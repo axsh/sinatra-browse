@@ -8,14 +8,19 @@ module Sinatra::Browse
     attr_reader :description
 
     def self.inherited(subclass)
-      #
-      # Global validators
-      #
+      subclass.class_eval do
+        # Initialize the validator hash
+        @validator_declarations ||= {}
 
-      # We need a to_s here because the user should be allowed to define dependencies
-      # using symbols while the actual keys of the params hash are strings
-      subclass.validator(:depends_on) { |dep| @params.has_key?(dep.to_s) }
-      subclass.validator(:in) { |possible_values| possible_values.member?(@value) }
+        #
+        # Global validators
+        #
+        validator(:in) { |possible_values| possible_values.member?(@value) }
+
+        # We need a to_s here because the user should be allowed to define dependencies
+        # using symbols while the actual keys of the params hash are strings
+        validator(:depends_on) { |dep| @params.has_key?(dep.to_s) }
+      end
     end
 
     def initialize(name, map)
@@ -107,8 +112,6 @@ module Sinatra::Browse
     #
 
     def self.validator(name, &blk)
-      @validator_declarations ||= {}
-
       @validator_declarations[name] = blk
     end
 
