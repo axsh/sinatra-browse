@@ -3,52 +3,11 @@
 require "spec_helper"
 
 describe "Integer validation" do
-
-  describe "min" do
-    context "with a parameter that's larger than the given minimum" do
-      it "works fine and dandy" do
-        get("features/integer_validation", min_test: 15)
-        expect(body["min_test"]).to eq 15
-      end
-    end
-
-    context "with a parameter that's exactly the given minimum" do
-      it "works fine and dandy" do
-        get("features/integer_validation", min_test: 10)
-        expect(body["min_test"]).to eq 10
-      end
-    end
-
-    context "with a parameter that's lower than the minimum" do
-      it "fails with a 400 status" do
-        get("features/integer_validation", min_test: 4)
-        expect(status).to eq 400
-      end
-    end
-  end
-
-  describe "max" do
-    context "with a parameter that's lower than the maximum" do
-      it "works fine and dandy" do
-        get("features/integer_validation", max_test: 15)
-        expect(body["max_test"]).to eq 15
-      end
-    end
-
-    context "with a parameter that's exactly the given maximum" do
-      it "works fine and dandy" do
-        get("features/integer_validation", max_test: 20)
-        expect(body["max_test"]).to eq 20
-      end
-    end
-
-    context "with a parameter that's larger than the given maximum" do
-      it "fails with a 400 status" do
-        get("features/integer_validation", max_test: 24)
-        expect(status).to eq 400
-      end
-    end
-  end
+  it_behaves_like "a parameter type with min/max validation", {
+    test_route: 'integer_validation',
+    minimum_value: {min_test: 10},
+    maximum_value: {max_test: 20}
+  }
 
   describe "in" do
     context "with a range" do
