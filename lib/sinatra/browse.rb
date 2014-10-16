@@ -29,9 +29,10 @@ module Sinatra::Browse
   #
   # Main DSL methods
   #
-  def param(name, type, options = {})
+  def parameter(name, type, options = {})
     temp_browse_params[name] = options.merge({ type: type })
   end
+  alias :param :parameter
 
   def parameter_options(parameter, options)
     if temp_browse_params[parameter].nil?
