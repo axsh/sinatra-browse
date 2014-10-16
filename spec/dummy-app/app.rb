@@ -4,6 +4,7 @@ require "sinatra/base"
 require "sinatra/browse"
 require "json"
 require "prime"
+require "date"
 
 # This application is just here so we can test disabling the remove_undefined_parameters flag
 class OtherApp < Sinatra::Base
@@ -71,6 +72,7 @@ class App < Sinatra::Base
   param :integer, :Integer
   param :boolean, :Boolean
   param :float, :Float
+  param :date, :DateTime
   get "/features/type_coercion" do
     params.to_json
   end
@@ -105,6 +107,13 @@ class App < Sinatra::Base
 
   min_max_test_params(:Float, 10.3, 5.6)
   get "/features/float_validation" do
+    params.to_json
+  end
+
+  min_max_test_params(:DateTime,
+                      DateTime.ordinal(2001,34,4,5,6,'+7'),
+                      DateTime.ordinal(2005,34,4,5,6,'+7'))
+  get "/features/date_time_validation" do
     params.to_json
   end
 
