@@ -4,6 +4,7 @@ require "sinatra/base"
 require "sinatra/browse"
 require "json"
 require "prime"
+require "date"
 
 # This application is just here so we can test disabling the remove_undefined_parameters flag
 class OtherApp < Sinatra::Base
@@ -71,6 +72,7 @@ class App < Sinatra::Base
   param :integer, :Integer
   param :boolean, :Boolean
   param :float, :Float
+  param :date, :DateTime
   get "/features/type_coercion" do
     params.to_json
   end
@@ -108,6 +110,18 @@ class App < Sinatra::Base
     params.to_json
   end
 
+  min_max_test_params(:DateTime,
+                      DateTime.ordinal(2001,34,4,5,6,'+7'),
+                      DateTime.ordinal(2005,34,4,5,6,'+7'))
+  param :string_min, :DateTime, min: '2014/02/05'
+  param :string_max, :DateTime, max: '2001-02-03T04:05:06.123456789+07:00'
+  param :default_string, :DateTime, default: '2014/02/05'
+  param :default_datetime, :DateTime, default: DateTime.new(2012, 12, 05)
+  param :default_proc, :DateTime, default: proc { DateTime.new(2000, 01, 01) }
+  get "/features/date_time_validation" do
+    params.to_json
+  end
+
   def self.helper_method
     param :reused, :String, in: ["joske", "jefke"]
   end
@@ -137,6 +151,11 @@ class App < Sinatra::Base
 
   param :a, :String, required: true
   get "/features/required" do
+    params.to_json
+  end
+
+  param :a, :Integer, format: /^jossefien$/
+  get "/features/non_existant_validator" do
     params.to_json
   end
 

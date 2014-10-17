@@ -5,7 +5,8 @@
 * Added min/max validators to the :Integer and :Float types.
 * Fixed a bug where files some times got required in the wrong order.
 * Added an option to spell out the full word parameter instead of the param abbreviation.
-* Allow arbitrary parameter descriptions
+* Allow arbitrary parameter descriptions.
+* Fixed a bug where all parameter validators where accessible from every parameter type.
 
 ## v0.5
 
