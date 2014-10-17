@@ -17,10 +17,22 @@ describe "DateTime validation" do
     end
   end
 
-  context "with a string in the 'max' validator" do
-    it 'coerces that string into a date and applies the validator' do
-      get('features/date_time_validation', string_max: '2005-1-1')
-      expect(status).to eq 400
+  [
+    [:max, {string_max: '2005-1-1'}],
+    [:min, {string_min: '2014-2-4'}]
+  ].each { |validator, fail_params|
+    context "with a string in the '#{validator}' validator" do
+      it 'coerces that string into a date and applies the validator' do
+        get('features/date_time_validation', fail_params)
+        expect(status).to eq 400
+      end
+    end
+  }
+
+  context "with a string set as default" do
+    it 'coerces the default value into a date' do
+      get('features/date_time_validation')
+      expect(body['default_string']).to eq '2014-02-05T00:00:00+00:00'
     end
   end
 end

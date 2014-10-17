@@ -115,6 +115,9 @@ class App < Sinatra::Base
                       DateTime.ordinal(2005,34,4,5,6,'+7'))
   param :string_min, :DateTime, min: '2014/02/05'
   param :string_max, :DateTime, max: '2001-02-03T04:05:06.123456789+07:00'
+  param :default_string, :DateTime, default: '2014/02/05'
+  param :default_datetime, :DateTime, default: DateTime.new(2012, 12, 05)
+  param :default_proc, :DateTime, default: proc { DateTime.new(2000, 01, 01) }
   get "/features/date_time_validation" do
     params.to_json
   end

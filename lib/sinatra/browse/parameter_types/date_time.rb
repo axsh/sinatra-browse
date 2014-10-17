@@ -10,17 +10,16 @@ module Sinatra::Browse
 
       def initialize(name, map)
         # Allow strings for min and max values
-        map[:min] = coerce(map[:min]) if map[:min] && !map[:min].is_a?(::DateTime)
-        map[:max] = coerce(map[:max]) if map[:max] && !map[:max].is_a?(::DateTime)
+        map[:min] = coerce(map[:min]) if map[:min].is_a?(::String)
+        map[:max] = coerce(map[:max]) if map[:max].is_a?(::String)
 
         super(name, map)
-
-        # Allow strings to be used for default
-        @default = coerce(@default) if @default.is_a?(String)
       end
 
       def coerce(value)
-        # Call parse on ruby's DateTime class rather than the parameter type
+        # We add this line because default values also get coerced.
+        return value if value.is_a?(::DateTime)
+
         ::DateTime.parse(value)
       end
     end
