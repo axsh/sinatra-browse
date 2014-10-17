@@ -29,10 +29,16 @@ describe "DateTime validation" do
     end
   }
 
-  context "with a string set as default" do
-    it 'coerces the default value into a date' do
-      get('features/date_time_validation')
-      expect(body['default_string']).to eq '2014-02-05T00:00:00+00:00'
+  [
+    [:String, '2014-02-05T00:00:00+00:00'],
+    [:DateTime, DateTime.new(2012, 12, 05).to_s],
+    [:proc,  DateTime.new(2000, 01, 01).to_s]
+  ].each { |type, expected_response|
+    context "with a #{type} set as default" do
+      it 'coerces the default value into a date' do
+        get('features/date_time_validation')
+        expect(body["default_#{type.downcase}"]).to eq expected_response
+      end
     end
-  end
+  }
 end
