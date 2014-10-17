@@ -51,7 +51,22 @@ At the time of writing four parameter types are available.
 * `:String`
 * `:Integer`
 * `:Float`
-* `:Boolean` ["1/0", "true/false", "t/f", "yes/no", "y/n"]
+* `:Boolean`
+
+A Boolean parameter will be true for values: `"1"`, `"true"`, `"t"`, `"yes"`, `"y"` and false for values: `"0"`, `"false"`, `"f"`, `"no"`, `"n"`
+
+* `:DateTime`
+
+A DateTime parameter relies on Ruby's [DateTime#parse](http://www.ruby-doc.org/stdlib-2.1.1/libdoc/date/rdoc/DateTime.html#method-c-parse) method and can thus handle all formats this method can.
+
+Examples:
+
+    'Sat, 03 Feb 2001 04:05:06 GMT'
+    'Sat, 3 Feb 2001 04:05:06 +0700'
+    '2001-02-03T04:05:06+07:00'
+    'H13.02.03T04:05:06+07:00'
+    '2014/02/05'
+    'march 2nd'
 
 ## Default values
 
