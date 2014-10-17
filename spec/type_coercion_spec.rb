@@ -28,9 +28,9 @@ describe "type coercion" do
       ['generic text', 'march 2nd', '2014-03-02T00:00:00+00:00']
     ]
 
-    accepted_formats.each { |format_name, date, expected_response|
+    accepted_formats.each { |format_name, request_param, expected_response|
       it "coerces a #{format_name} string into a DateTime" do
-        get("features/type_coercion", date: date)
+        get("features/type_coercion", date: request_param)
         expect(body["date"]).to eq expected_response
       end
     }
