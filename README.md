@@ -71,7 +71,7 @@ Examples:
 
 ## Default values
 
-You can set default values in your declarations. These will be used when the parameter in question wasn't provided in the request. You can either set the default value or provide a proc to generate it.
+You can set default values in your declarations. These will be used when the parameter in question wasn't provided in the request. You can either set the default value or provide a proc/lambda to generate it.
 
 ```ruby
 param :media_type, :String, default: "book"
@@ -114,21 +114,29 @@ param :small_prime_number, :Integer, in: Prime.take(10)
 param :order, :String, in: ["ascending", "descending"]
 ```
 
-### Integer validation
+### Minimum and maximum validation
 
-The following parameter validators can only be used for parameters of type `:Integer`.
+In the case of numeric values like `:Integer`, `:Float` and `:DateTime`, you can specify a minimum and/or maximum value.
 
-`min` The integer must be greater than or equal to this.
+`min` The parameter must be greater than or equal to this.
 
 ```ruby
 param :min_example, :Integer, min: 128
 ```
 
-`max` The integer must be lesser than or equal to this.
+`max` The parameter must be lesser than or equal to this.
 
 ```ruby
-param :max_example, :Integer, max: 90_000
+param :max_example, :Float, max: 66.666
 ```
+
+In the case of `:DateTime`, min/max validators van be defined as either ruby's DateTime class or a String representation that Ruby's [DateTime#parse](http://www.ruby-doc.org/stdlib-2.1.1/libdoc/date/rdoc/DateTime.html#method-c-parse) method can handle.
+
+```ruby
+param :string_min, :DateTime, min: '2014/02/05'
+param :date_max, :DateTime, max: DateTime.ordinal(2005,34,4,5,6,'+7')
+```
+
 
 ### String validation
 
