@@ -112,28 +112,6 @@ module Sinatra::Browse
 
     app.default_on_error { |error_hash| _default_on_error(error_hash) }
 
-    app.before do
-      browse_route = app.browse_routes_for(request.request_method, request.path_info)
-
-      if browse_route
-        if settings.remove_undefined_parameters
-          browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
-        end
-
-        validation_successful, error_hash = browse_route.process(params)
-
-        unless validation_successful
-          if error_hash[:on_error].respond_to?(:to_proc)
-            error_proc = error_hash.delete(:on_error).to_proc
-            instance_exec error_hash, &error_proc
-          else
-            instance_exec error_hash, &app.default_on_error
-          end
-        end
-
-      end
-    end
-
     app.describe "Displays this browsable API."
     app.param :format, :String, in: ["html", "json", "yaml", "yml"], default: "html"
     app.get '/browse' do
@@ -143,9 +121,30 @@ module Sinatra::Browse
 
   def self.route_added(verb, path, block)
     return if verb == "HEAD" && !@app.settings.show_head_routes
-    @app.create_browse_route(verb, path)
+    browse_route = @app.create_browse_route(verb, path)
     @app.reset_temp_params
     @app.desc ""
+
+    # Find route and append to conditions.
+    signature = @app.routes[verb].find { |sig| sig[0].match(path) } 
+    signature[2] << @app.condition do
+      if settings.remove_undefined_parameters
+        browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
+      end
+
+      validation_successful, error_hash = browse_route.process(params)
+
+      unless validation_successful
+        if error_hash[:on_error].respond_to?(:to_proc)
+          error_proc = error_hash.delete(:on_error).to_proc
+          instance_exec error_hash, &error_proc
+        else
+          instance_exec error_hash, &self.class.default_on_error
+        end
+      end
+    end
+    # Reset @conditions
+    @app.instance_variable_set(:@conditions, [])
   end
 end
 
