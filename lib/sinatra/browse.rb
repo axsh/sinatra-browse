@@ -127,7 +127,7 @@ module Sinatra::Browse
 
     # Find route and append to conditions.
     signature = @app.routes[verb].find { |sig| sig[0].match(path) }
-    signature[2] << @app.generate_method("Sinatra Browse: #{verb} #{path}") do
+    @app.condition("Sinatra Browse: #{verb} #{path}") do
       if settings.remove_undefined_parameters
         browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
       end
@@ -143,6 +143,8 @@ module Sinatra::Browse
         end
       end
     end
+    signature[2] << @app.instance_variable_get(:conditions).first
+    @app.instance_variable_set(:conditions, [])
   end
 end
 
