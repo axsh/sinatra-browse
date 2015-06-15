@@ -143,8 +143,8 @@ module Sinatra::Browse
         end
       end
     end
-    signature[2] << @app.instance_variable_get(:conditions).first
-    @app.instance_variable_set(:conditions, [])
+    signature[2] << @app.instance_variable_get(:@conditions).first
+    @app.instance_variable_set(:@conditions, [])
   end
 end
 
