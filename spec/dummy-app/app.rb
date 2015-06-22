@@ -19,6 +19,27 @@ class OtherApp < Sinatra::Base
   end
 end
 
+class ConditionTestApp < Sinatra::Base
+  register Sinatra::Browse
+
+  set(:my_condition) { |value| condition { params["value"] == value } }
+
+  param :value, :Integer
+  get '/condition', my_condition: 1 do
+    { res: "yay"}.to_json
+  end
+
+  param :value, :Integer
+  get '/condition', my_condition: 2 do
+    { res: "double yay"}.to_json
+  end
+
+  param :value, :Integer
+  get '/condition' do
+    { res: "no yay"}.to_json
+  end
+end
+
 class SystemParamApp < Sinatra::Base
   register Sinatra::Browse
 
