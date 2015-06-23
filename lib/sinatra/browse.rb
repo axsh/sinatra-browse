@@ -126,20 +126,23 @@ module Sinatra::Browse
     if ! @app.temp_browse_params.empty?
       # Find the last route and append to conditions.
       signature = @app.routes[verb].last
-      # Sinatra::Base#condition does exactly same thing.
-      signature[2] << @app.__send__(:generate_method, "Sinatra Browse: #{verb} #{path}") do
+      # Wrap route block with validation block.
+      route_block = signature[3]
+      signature[3] = lambda do |app, args|
         if settings.remove_undefined_parameters
           browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
         end
 
         validation_successful, error_hash = browse_route.process(params)
 
-        unless validation_successful
+        if validation_successful
+          route_block.call(app, args)
+        else
           if error_hash[:on_error].respond_to?(:to_proc)
             error_proc = error_hash.delete(:on_error).to_proc
-            instance_exec error_hash, &error_proc
+            app.instance_exec error_hash, &error_proc
           else
-            instance_exec error_hash, &self.class.default_on_error
+            app.instance_exec error_hash, &app.class.default_on_error
           end
         end
       end
