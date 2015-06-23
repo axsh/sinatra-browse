@@ -125,9 +125,10 @@ module Sinatra::Browse
     @app.reset_temp_params
     @app.desc ""
 
-    # Find route and append to conditions.
-    signature = @app.routes[verb].find { |sig| sig[0].match(path) }
-    @app.condition("Sinatra Browse: #{verb} #{path}") do
+    # Find the last route and append to conditions.
+    signature = @app.routes[verb].last
+    # Sinatra::Base#condition does exactly same thing.
+    signature[2] << @app.__send__(:generate_method, "Sinatra Browse: #{verb} #{path}") do
       if settings.remove_undefined_parameters
         browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
       end
@@ -143,8 +144,6 @@ module Sinatra::Browse
         end
       end
     end
-    signature[2] << @app.instance_variable_get(:@conditions).first
-    @app.instance_variable_set(:@conditions, [])
   end
 end
 
