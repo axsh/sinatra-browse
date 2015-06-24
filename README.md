@@ -58,7 +58,7 @@ At the time of writing four parameter types are available.
 
 A `Boolean` parameter will be true for values: `"1"`, `"true"`, `"t"`, `"yes"`, `"y"` and false for values: `"0"`, `"false"`, `"f"`, `"no"`, `"n"`
 
-A `DateTime` parameter relies on Ruby's [DateTime#parse](http://www.ruby-doc.org/stdlib-2.1.1/libdoc/date/rdoc/DateTime.html#method-c-parse) method and can thus handle all formats this method can.
+A `DateTime` parameter relies on Ruby's [DateTime#parse](http://www.ruby-doc.org/stdlib-2.2.2/libdoc/date/rdoc/DateTime.html#method-c-parse) method and can thus handle all formats this method can.
 
 Examples:
 
