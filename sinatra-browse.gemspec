@@ -9,4 +9,6 @@ Gem::Specification.new do |s|
   s.files       = Dir.glob("{lib}/**/*") + %w(LICENSE README.md)
   s.homepage    = 'https://github.com/axsh/sinatra-browse'
   s.license     = 'LGPLv3'
+
+  s.required_ruby_version = '>= 1.9.3'
 end

@@ -4,6 +4,7 @@ require "sinatra/base"
 require "sinatra/browse"
 require "json"
 require "prime"
+require "date"
 
 # This application is just here so we can test disabling the remove_undefined_parameters flag
 class OtherApp < Sinatra::Base
@@ -77,6 +78,11 @@ class App < Sinatra::Base
 
   before { content_type :json }
 
+  def self.min_max_test_params(type, min = 10, max = 20)
+    param :min_test, type, min: min
+    param :max_test, type, max: max
+  end
+
   param :a, :String
   param :b, :String
   get "/features/remove_undefined" do
@@ -87,6 +93,7 @@ class App < Sinatra::Base
   param :integer, :Integer
   param :boolean, :Boolean
   param :float, :Float
+  param :date, :DateTime
   get "/features/type_coercion" do
     params.to_json
   end
@@ -114,9 +121,25 @@ class App < Sinatra::Base
 
   param :single_digit, :Integer, in: 1..9
   param :first_ten_primes, :Integer, in: Prime.take(10)
-  param :min_test, :Integer, min: 10
-  param :max_test, :Integer, max: 20
+  min_max_test_params(:Integer)
   get "/features/integer_validation" do
+    params.to_json
+  end
+
+  min_max_test_params(:Float, 10.3, 5.6)
+  get "/features/float_validation" do
+    params.to_json
+  end
+
+  min_max_test_params(:DateTime,
+                      DateTime.ordinal(2001,34,4,5,6,'+7'),
+                      DateTime.ordinal(2005,34,4,5,6,'+7'))
+  param :string_min, :DateTime, min: '2014/02/05'
+  param :string_max, :DateTime, max: '2001-02-03T04:05:06.123456789+07:00'
+  param :default_string, :DateTime, default: '2014/02/05'
+  param :default_datetime, :DateTime, default: DateTime.new(2012, 12, 05)
+  param :default_proc, :DateTime, default: proc { DateTime.new(2000, 01, 01) }
+  get "/features/date_time_validation" do
     params.to_json
   end
 
@@ -149,6 +172,11 @@ class App < Sinatra::Base
 
   param :a, :String, required: true
   get "/features/required" do
+    params.to_json
+  end
+
+  param :a, :Integer, format: /^jossefien$/
+  get "/features/non_existant_validator" do
     params.to_json
   end
 

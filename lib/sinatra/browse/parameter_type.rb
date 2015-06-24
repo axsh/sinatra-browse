@@ -1,18 +1,33 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
-  def self.parameter_type(name, &blk)
-    const_set "#{name}Type", Class.new(ParameterType, &blk)
-  end
-
   class ParameterType
     attr_reader :name
     attr_reader :default
     attr_reader :validators
+    attr_reader :description
+
+    def self.inherited(subclass)
+      subclass.class_eval do
+        # Initialize the validator hash
+        @validator_declarations ||= {}
+
+        #
+        # Global validators
+        #
+        validator(:in) { |possible_values| possible_values.member?(@value) }
+
+        # We need a to_s here because the user should be allowed to define dependencies
+        # using symbols while the actual keys of the params hash are strings
+        validator(:depends_on) { |dep| @params.has_key?(dep.to_s) }
+      end
+    end
 
     def initialize(name, map)
       @name = name
       @default = map.delete(:default)
+
+      @description = map.delete(:description) || map.delete(:desc)
 
       @transform = map.delete(:transform)
       @transform = @transform.to_proc if @transform
@@ -21,8 +36,9 @@ module Sinatra::Browse
       @on_error = map.delete(:on_error)
 
       @validators = []
+
       map.each do |key, value|
-        if val_blk = @@validator_declarations[key]
+        if val_blk = validator_declarations[key]
           @validators << Validator.new(
             name: key,
             criteria: map[key],
@@ -68,7 +84,7 @@ module Sinatra::Browse
 
     def type
       type_string = self.class.to_s.split("::").last
-      type_string[0, type_string.size - 4].to_sym
+      type_string.to_sym
     end
 
     def to_hash(options = {})
@@ -95,23 +111,17 @@ module Sinatra::Browse
     # DSL
     #
 
-    def self.coerce(&blk)
-      define_method(:coerce) { |value| blk.call(value) }
-    end
-
     def self.validator(name, &blk)
-      @@validator_declarations ||= {}
-
-      @@validator_declarations[name] = blk
+      @validator_declarations[name] = blk
     end
 
-    #
-    # Validators
-    #
+    def self.validator_declarations
+      @validator_declarations
+    end
 
-    # We need a to_s here because the user should be allowed to define dependencies
-    # using symbols while the actual keys of the params hash are strings
-    validator(:depends_on) { |dep| @params.has_key?(dep.to_s) }
-    validator(:in) { |possible_values| possible_values.member?(@value) }
+    def validator_declarations
+      self.class.validator_declarations
+    end
+
   end
 end

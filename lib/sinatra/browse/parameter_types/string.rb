@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
 module Sinatra::Browse
+  module ParameterTypes
+    class String < ParameterType
+      def coerce(value)
+        String(value)
+      end
 
-  parameter_type(:String) do
-    coerce { |value| String(value) }
-
-    validator(:format) { |regex| !! (@value =~ regex) }
-    validator(:min_length) { |min_len| @value.length >= min_len }
-    validator(:max_length) { |max_len| @value.length <= max_len }
+      #TODO: raise error when declaring a validator that doesn't exist
+      validator(:format) { |regex| !! (@value =~ regex) }
+      validator(:min_length) { |min_len| @value.length >= min_len }
+      validator(:max_length) { |max_len| @value.length <= max_len }
+    end
   end
-
 end

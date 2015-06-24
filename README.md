@@ -40,11 +40,9 @@ The syntax is inspired by the [sinatra-param](https://github.com/mattt/sinatra-p
 
 **Browsable API**
 
-Sinatra-browse allows you to surf to your API. This works as documentation and allows you to send requests and see their responses directly in your browser.
+Sinatra-browse automatically adds another route simply called `browse`. Surfing to it will display documentation generated from the parameter definitions.
 
     http://<api_ip_address>:<api_port>/browse
-
-*Remark:* This is still work in progress. Right now the page only shows some simple documentation.
 
 ## Parameter types
 
@@ -53,15 +51,41 @@ At the time of writing four parameter types are available.
 * `:String`
 * `:Integer`
 * `:Float`
-* `:Boolean` ["1/0", "true/false", "t/f", "yes/no", "y/n"]
+* `:Boolean`
+* `:DateTime`
+
+**Remarks:**
+
+A `Boolean` parameter will be true for values: `"1"`, `"true"`, `"t"`, `"yes"`, `"y"` and false for values: `"0"`, `"false"`, `"f"`, `"no"`, `"n"`
+
+A `DateTime` parameter relies on Ruby's [DateTime#parse](http://www.ruby-doc.org/stdlib-2.2.2/libdoc/date/rdoc/DateTime.html#method-c-parse) method and can thus handle all formats this method can.
+
+Examples:
+
+    'Sat, 03 Feb 2001 04:05:06 GMT'
+    'Sat, 3 Feb 2001 04:05:06 +0700'
+    '2001-02-03T04:05:06+07:00'
+    'H13.02.03T04:05:06+07:00'
+    '2014/02/05'
+    'march 2nd'
 
 ## Default values
 
-You can set default values in your declarations. These will be used when the parameter in question wasn't provided in the request. You can either set the default value or provide a proc to generate it.
+You can set default values in your declarations. These will be used when the parameter in question wasn't provided in the request. You can either set the default value or provide a proc/lambda to generate it.
 
 ```ruby
 param :media_type, :String, default: "book"
 param :year, :Integer, default: lambda { Time.now.year }
+```
+
+## Describing parameters
+
+Parameters declarations can have an optional arbitrary discription to be included in the generated documentation.
+
+```ruby
+# Both of these syntaxes will work.
+param :name, :Name, description: "What your mother calls you."
+param :age, :Integer, desc: "The amount of years you've spent on this planet."
 ```
 
 ## Parameter validation
@@ -89,6 +113,30 @@ param :single_digit, :Integer, in: 1..9
 param :small_prime_number, :Integer, in: Prime.take(10)
 param :order, :String, in: ["ascending", "descending"]
 ```
+
+### Minimum and maximum validation
+
+In the case of numeric values like `:Integer`, `:Float` and `:DateTime`, you can specify a minimum and/or maximum value.
+
+`min` The parameter must be greater than or equal to this.
+
+```ruby
+param :min_example, :Integer, min: 128
+```
+
+`max` The parameter must be lesser than or equal to this.
+
+```ruby
+param :max_example, :Float, max: 66.666
+```
+
+In the case of `:DateTime`, min/max validators van be defined as either ruby's DateTime class or a String representation that Ruby's [DateTime#parse](http://www.ruby-doc.org/stdlib-2.1.1/libdoc/date/rdoc/DateTime.html#method-c-parse) method can handle.
+
+```ruby
+param :string_min, :DateTime, min: '2014/02/05'
+param :date_max, :DateTime, max: DateTime.ordinal(2005,34,4,5,6,'+7')
+```
+
 
 ### String validation
 
