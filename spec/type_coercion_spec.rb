@@ -25,7 +25,7 @@ describe "type coercion" do
       ['ISO 8601', '2001-02-03T04:05:06+07:00', '2001-02-03T04:05:06+07:00'],
       ['JIS X 0301', 'H13.02.03T04:05:06+07:00', '2001-02-03T04:05:06+07:00'],
       ['year/month/day', '2014/02/05', '2014-02-05T00:00:00+00:00'],
-      ['generic text', 'march 2nd', '2014-03-02T00:00:00+00:00']
+      ['generic text', 'march 2nd', "#{Time.now.year}-03-02T00:00:00+00:00"]
     ]
 
     accepted_formats.each { |format_name, request_param, expected_response|
