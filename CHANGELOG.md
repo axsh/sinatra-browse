@@ -1,40 +1,50 @@
 # Changelog
 
-## v0.6
+All notable changes to sinatra-browse will be documented in this file.
+This project adheres to [Semantic Versioning](http://semver.org/).
 
-* Added a DateTime parameter.
-* Added min/max validators to the :Integer and :Float types.
-* Fixed a bug where files some times got required in the wrong order.
-* Added an option to spell out the full word parameter instead of the param abbreviation.
-* Allow arbitrary parameter descriptions.
-* Fixed a bug where all parameter validators where accessible from every parameter type.
-* Refactored internal parameter type declaration to be more simple ruby code. (No DSL)
+## [Unreleased]
 
-## v0.5
+* `Changed` Adapted the changelog format to follow the same style as our other projects.
 
-* A lot of code cleanup.
-* Cleaned up the browsable API part.
+## [0.6] - 2015-06-24
+
+* `Added` New parameter type: `DateTime`.
+* `Added` New validators `min` and `max` to all numeric parameters. (Float, Integer and DateTime)
+* `Added` Optional syntax `parameter` that has the exact same use as `param`.
+* `Added` New keyword `description` or `desc` that allows you to fill in a human readable description of each parameter.
+
+* `Fixed` A bug where files some times got required in the wrong order.
+* `Fixed` A bug where all parameter validators where accessible from every parameter type.
+
+* `Refactored` Internal parameter type declaration is now more simple ruby code. (No DSL)
+
+## [0.5] - 2014-07-28
+
+* `Changed` Cleaned up the browsable API part.
   - html is now defined in an erb template and used a proper doctype, etc.
   - Changed the look of the html template a bit even though it's still not using stylesheets.
   - Cleaned up the yaml and json generation.
   - Allow yaml to be generated using both 'yml' and 'yaml' as the format parameter.
 
-## v0.4
+* `Refactored` A lot of internal code cleanup.
 
-* Implemented two new string validations.
+## [0.4] - 2014-05-29
+
+* `Added` Implemented two new String validations.
     - min_length
     - max_length
 
-## v0.3
+## [0.3] - 2014-05-08
 
-* Improved the error hash to contain more information about the error that occurred.
+* `Added` The possibility to override default error behaviour.
 
-* Added possibility to override default error behaviour.
+* `Changed` Improved the error hash to contain more information about the error that occurred.
 
-* Renamed `system_parameters` option to `allowed_undefined_parameters`.
+* `Changed` Renamed `system_parameters` option to `allowed_undefined_parameters`.
 
-* Don't show HEAD routes in the browsable API by default.
+* `Changed` Don't show HEAD routes in the browsable API by default.
 
-## v0.2
+## [v0.2] - 2014-04-10
 
 First usable version.
