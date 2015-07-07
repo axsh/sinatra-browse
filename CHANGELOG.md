@@ -5,9 +5,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+* `Added` Support for Ruby 2.2.2. That means the unit tests are now run on that version. It was probably working already anyway.
+
 * `Changed` Adapted the changelog format to follow the same style as our other projects.
 
 * `Fixed` A bug where parameters that were not required and had no default value would be set to nil if they were missing from a request.
+
+* `Removed` Support for Ruby 1.9.3 as Ruby officialy dropped support for it in February this year. It might still work but Sinatra-browse will no longer be unit tested against it.
 
 ## [0.6] - 2015-06-24
 
