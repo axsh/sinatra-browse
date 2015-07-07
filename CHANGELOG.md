@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 * `Changed` Adapted the changelog format to follow the same style as our other projects.
 
+* `Fixed` A bug where parameters that were not required and had no default value would be set to nil if they were missing from a request.
+
 ## [0.6] - 2015-06-24
 
 * `Added` New parameter type: `DateTime`.
