@@ -53,6 +53,10 @@ module Sinatra::Browse
       @default.is_a?(Proc) ? @default.call : @default
     end
 
+    def default_set?
+      ! @default.nil?
+    end
+
     def required?
       @required
     end

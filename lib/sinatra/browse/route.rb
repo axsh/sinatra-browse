@@ -40,7 +40,7 @@ module Sinatra::Browse
       @param_declarations.each do |name, pd|
         name = name.to_s # The params hash uses strings but declarations use symbols
 
-        params[name] ||= pd.default
+        params[name] ||= pd.default if pd.default_set?
 
         # We specifically check for nil here since a boolean's default can be false
         if params[name].nil?
