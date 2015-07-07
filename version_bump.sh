@@ -27,10 +27,16 @@ fi
 
 git add ${gemspec} ${changelog}
 git commit -m "Bumped version to ${new_version}"
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+git checkout master
+git pull --rebase
+git merge ${current_branch}
+
 git push origin master
 
 git tag v${new_version}
-git push origin v${new_version}
+echo "git push origin v${new_version}"
 
 gem build ${gemspec}
 gem push sinatra-browse-${new_version}.gem
