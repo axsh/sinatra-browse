@@ -27,11 +27,10 @@ describe "default values" do
     end
   end
 
-  context "with 'nil' as the default" do
-    it "will explicitely set nil as expected (not leave the missing value empty)" do
+  context "with nil as the default" do
+    it "will create a key with nil as it's value" do
       get("features/default")
-      p body
-      expect(body['n']).to eq("") # nil will coerce into an empty string
+      expect(body['n']).to be_nil
     end
   end
 end
