@@ -19,6 +19,21 @@ describe "default values" do
       expect(body['a']).to eq(2)
     end
   end
+
+  context "with no default provided" do
+    it "will not set any value (including nil) for missing parameters" do
+      get("features/default")
+      expect(body).not_to have_key('default_not_set')
+    end
+  end
+
+  context "with 'nil' as the default" do
+    it "will explicitely set nil as expected (not leave the missing value empty)" do
+      get("features/default")
+      p body
+      expect(body['n']).to eq("") # nil will coerce into an empty string
+    end
+  end
 end
 
 describe "transform" do

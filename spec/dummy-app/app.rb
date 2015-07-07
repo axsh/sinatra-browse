@@ -101,6 +101,8 @@ class App < Sinatra::Base
   param :a, :String, default: "yay"
   param :b, :Integer, default: 11
   param :c, :Boolean, default: false
+  param :n, :String, default: nil
+  param :default_not_set, :String
   get "/features/default" do
     params.to_json
   end
