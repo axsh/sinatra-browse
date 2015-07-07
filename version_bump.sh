@@ -25,7 +25,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   exit 1
 fi
 
-git add ${gemspec}
+git add ${gemspec} ${changelog}
 git commit -m "Bumped version to ${new_version}"
 git push origin master
 
