@@ -129,13 +129,12 @@ module Sinatra::Browse
       # Wrap route block with validation block.
       route_block = signature[3]
       signature[3] = lambda do |app, args|
-        app.instance_exec do
+        validation_successful, error_hash = app.instance_exec do
           if settings.remove_undefined_parameters
             browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
           end
+          browse_route.process(params)
         end
-
-        validation_successful, error_hash = browse_route.process(params)
 
         if validation_successful
           route_block[app, args]
