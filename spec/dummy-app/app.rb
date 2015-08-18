@@ -23,7 +23,7 @@ end
 class ConditionTestApp < Sinatra::Base
   register Sinatra::Browse
 
-  set(:my_condition) { |value| condition { params["value"] == value } }
+  set(:my_condition) { |value| condition { params["value"].to_i == value } }
 
   param :value, :Integer
   get '/condition', my_condition: 1 do
