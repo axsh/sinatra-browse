@@ -121,31 +121,30 @@ module Sinatra::Browse
 
   def self.route_added(verb, path, block)
     return if verb == "HEAD" && !@app.settings.show_head_routes
+    return if @app.temp_browse_params.empty?
     browse_route = @app.create_browse_route(verb, path)
 
-    if ! @app.temp_browse_params.empty?
-      # Find the last route and append to conditions.
-      signature = @app.routes[verb].last
-      # Wrap route block with validation block.
-      route_block = signature[3]
-      signature[3] = lambda do |app, args|
+    # Find the last route and append to conditions.
+p    signature = @app.routes[verb].last
+    # Wrap route block with validation block.
+    route_block = signature[3]
+    signature[3] = lambda do |app, args|
 p        caller(0, 6)
-        validation_successful, error_hash = app.instance_exec do
-          if settings.remove_undefined_parameters
-            browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
-          end
-          browse_route.process(params)
+      validation_successful, error_hash = app.instance_exec do
+        if settings.remove_undefined_parameters
+          browse_route.delete_undefined(params, settings.allowed_undefined_parameters)
         end
-
-        if validation_successful
-          route_block[app, args]
+        browse_route.process(params)
+      end
+      
+      if validation_successful
+        route_block[app, args]
+      else
+        if error_hash[:on_error].respond_to?(:to_proc)
+          error_proc = error_hash.delete(:on_error).to_proc
+          app.instance_exec error_hash, &error_proc
         else
-          if error_hash[:on_error].respond_to?(:to_proc)
-            error_proc = error_hash.delete(:on_error).to_proc
-            app.instance_exec error_hash, &error_proc
-          else
-            app.instance_exec error_hash, &app.class.default_on_error
-          end
+          app.instance_exec error_hash, &app.class.default_on_error
         end
       end
     end
