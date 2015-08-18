@@ -125,7 +125,7 @@ module Sinatra::Browse
     browse_route = @app.create_browse_route(verb, path)
 
     # Find the last route and append to conditions.
-p    signature = @app.routes[verb].last
+p    signature = @app.routes[verb].first
     # Wrap route block with validation block.
     route_block = signature[3]
     signature[3] = lambda do |app, args|
