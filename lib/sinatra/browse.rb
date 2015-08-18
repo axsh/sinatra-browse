@@ -129,6 +129,7 @@ p    signature = @app.routes[verb].last
     # Wrap route block with validation block.
     route_block = signature[3]
     signature[3] = lambda do |app, args|
+p        signature      
 p        caller(0, 6)
       validation_successful, error_hash = app.instance_exec do
         if settings.remove_undefined_parameters
