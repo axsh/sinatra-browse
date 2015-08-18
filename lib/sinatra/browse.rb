@@ -120,6 +120,7 @@ module Sinatra::Browse
   end
 
   def self.route_added(verb, path, block)
+    super
     return if verb == "HEAD" && !@app.settings.show_head_routes
     browse_route = @app.create_browse_route(verb, path)
 
@@ -128,7 +129,9 @@ module Sinatra::Browse
       signature = @app.routes[verb].last
       # Wrap route block with validation block.
       route_block = signature[3]
-      signature[3] = lambda do |app, args|
+      signature[3] = lambda do |app, *args|
+        p app
+        p self
         if app.settings.remove_undefined_parameters
           browse_route.delete_undefined(params, app.settings.allowed_undefined_parameters)
         end
