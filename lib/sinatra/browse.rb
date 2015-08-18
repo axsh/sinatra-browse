@@ -120,7 +120,6 @@ module Sinatra::Browse
   end
 
   def self.route_added(verb, path, block)
-    super
     return if verb == "HEAD" && !@app.settings.show_head_routes
     browse_route = @app.create_browse_route(verb, path)
 
