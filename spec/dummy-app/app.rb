@@ -39,6 +39,12 @@ class ConditionTestApp < Sinatra::Base
   get '/condition' do
     { res: "no yay"}.to_json
   end
+
+  set(:my_other_condition) { |value| condition { params["value"] == value } }
+  param :value, :String
+  get '/other_condition', my_other_condition: 'hou oet' do
+    { res: "de oeten > all" }.to_json
+  end
 end
 
 class SystemParamApp < Sinatra::Base

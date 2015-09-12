@@ -14,5 +14,8 @@ describe "condition" do
 
     get("condition", value: 3)
     expect(body["res"]).to eq("no yay")
+
+    get("other_condition", value: 'hou oet')
+    expect(body["res"]).to eq("de oeten > all")
   end
 end
