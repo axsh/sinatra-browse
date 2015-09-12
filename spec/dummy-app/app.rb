@@ -186,4 +186,14 @@ class App < Sinatra::Base
   get "/features/error_handing" do
     params.to_json
   end
+
+  param :with, :String, transform: :upcase
+  param :variables, :Boolean
+  get "/features/working/:with/path/:variables" do
+    params.to_json
+  end
+
+  get "/features/:undefined/path/variables" do
+    params.to_json
+  end
 end
