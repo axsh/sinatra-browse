@@ -89,6 +89,10 @@ class App < Sinatra::Base
     param :max_test, type, max: max
   end
 
+  get "/features/route_without_parameters" do
+    params.to_json
+  end
+
   param :a, :String
   param :b, :String
   get "/features/remove_undefined" do
