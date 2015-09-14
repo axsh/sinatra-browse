@@ -66,5 +66,15 @@ describe "browsable api" do
     it "shows 'dynamically generated' for procs" do
       expect(body[4]["parameters"][0]["default"]).to eq "dynamically generated"
     end
+
+    context "when a route has no parameters" do
+      it "is still added to the documentation generation" do
+        api_spec = YAML.load(get("browse", format: :yaml).body)
+        r = api_spec.find { |i| i[:route] == 'GET  /features/route_without_parameters' }
+
+        expect(r).not_to be_nil
+      end
+    end
+
   end
 end
