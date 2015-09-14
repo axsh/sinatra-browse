@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 * `Added` It is now possible to use sinatra-browse with named parameters in routes patterns.
 
+* `Changed` Sinatra-browse now does its work in a condition instead of a before block. This was done to become able to use named parameters in route patterns but also means user defind conditions will be executed before sinatra-browse.
+
 ## [0.6.1] - 2015-07-07
 
 * `Added` Support for Ruby 2.2.2. That means the unit tests are now run on that version. It was probably working already anyway.
