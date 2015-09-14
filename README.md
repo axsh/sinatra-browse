@@ -258,4 +258,10 @@ get 'foo/:bar' do
 end
 ```
 
-If you have Sinatra-browse version 0.7 or higher, you will be able to define the variable `bar`.
+If you have sinatra-browse version 0.7 or higher, you will be able to define the variable `bar`.
+
+## Using conditions
+
+Before version 0.7, sinatra-browse did its work in a before block. This meant that all of its parameter type casting and validation happened before conditions blocks defined in your API.
+
+In version 0.7 and higher, sinatra-browse actually does its work in a new condition that is executed after user defined conditions. Any condition blocks you define, will be execute *before* sinatra-browse and have access to the raw unprocessed `@params` hash. This change was done to become able to use named parameters in route patterns.
