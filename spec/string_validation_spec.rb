@@ -73,4 +73,3 @@ describe "String validation" do
     end
   end
 end
-
