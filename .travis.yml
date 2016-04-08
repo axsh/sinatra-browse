@@ -4,8 +4,10 @@ rvm:
   - 2.1.2
   - 2.2.0
   - 2.2.2
+  - 2.2.3
+  - 2.2.4
   - jruby
-  - rbx-2.2.7
+  - rbx
   - ruby-head
 script:
   - bundle exec rspec
