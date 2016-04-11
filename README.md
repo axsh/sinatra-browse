@@ -55,8 +55,11 @@ At the time of writing these parameter types are available.
 * `:DateTime`
 * `:Hash`
 * `:Array`
+* `:Any`
 
 **Remarks:**
+
+The `Any` parameter type will accept any type of parameter and not do any type conversion on it.
 
 A `Boolean` parameter will be true for values: `"1"`, `"true"`, `"t"`, `"yes"`, `"y"` and false for values: `"0"`, `"false"`, `"f"`, `"no"`, `"n"`
 

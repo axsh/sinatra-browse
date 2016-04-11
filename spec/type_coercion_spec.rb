@@ -21,6 +21,25 @@ describe "type coercion" do
     expect(body['array']).to be_a(Array)
   end
 
+  describe "Any coercion" do
+    it "accepts any type of parameter and does not do any type coercion" do
+      get("features/type_coercion", any: "olifant")
+      expect(body["any"]).to eq "olifant"
+
+      get("features/type_coercion", any: 1)
+      expect(body["any"]).to eq "1"
+
+      get("features/type_coercion", any: true)
+      expect(body["any"]).to eq "true"
+
+      get("features/type_coercion", any: {a: :b, c: :d})
+      expect(body["any"]).to eq({"a" => "b", "c" => "d"})
+
+      get("features/type_coercion", any: [1, 2, 3, 4, "hoedje van"])
+      expect(body["any"]).to eq ["1", "2", "3", "4", "hoedje van"]
+    end
+  end
+
   describe "Hash coercion" do
     it "accepts hash parameters" do
       get("features/type_coercion", "hash[t]=t&hash[f]=f")
