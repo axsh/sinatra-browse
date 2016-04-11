@@ -46,13 +46,14 @@ Sinatra-browse automatically adds another route simply called `browse`. Surfing 
 
 ## Parameter types
 
-At the time of writing four parameter types are available.
+At the time of writing these parameter types are available.
 
 * `:String`
 * `:Integer`
 * `:Float`
 * `:Boolean`
 * `:DateTime`
+* `:Hash`
 
 **Remarks:**
 
@@ -60,7 +61,7 @@ A `Boolean` parameter will be true for values: `"1"`, `"true"`, `"t"`, `"yes"`, 
 
 A `DateTime` parameter relies on Ruby's [DateTime#parse](http://www.ruby-doc.org/stdlib-2.2.2/libdoc/date/rdoc/DateTime.html#method-c-parse) method and can thus handle all formats this method can.
 
-Examples:
+DateTime Examples:
 
     'Sat, 03 Feb 2001 04:05:06 GMT'
     'Sat, 3 Feb 2001 04:05:06 +0700'
