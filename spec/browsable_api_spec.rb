@@ -19,16 +19,16 @@ describe "browsable api" do
     it "returns the api documentation in yaml format" do
       b = YAML.load(last_response.body)
 
-      expect(b[3][:route]).to eq "GET  /features/default"
+      expect(b[4][:route]).to eq "GET  /features/default"
 
-      expect(b[3][:parameters][0]).to eq({
+      expect(b[4][:parameters][0]).to eq({
         :name => :a,
         :type => :String,
         :required => false,
         :default => "yay"
       })
 
-      expect(b[3][:parameters][1]).to eq({
+      expect(b[4][:parameters][1]).to eq({
         :name => :b,
         :type => :Integer,
         :required => false,
@@ -38,7 +38,16 @@ describe "browsable api" do
 
     it "shows 'dynamically generated' for procs" do
       b = YAML.load(last_response.body)
-      expect(b[4][:parameters][0][:default]).to eq "dynamically generated"
+      expect(b[5][:parameters][0][:default]).to eq "dynamically generated"
+    end
+
+    context "when a route has no parameters" do
+      it "is still added to the documentation generation" do
+        api_spec = YAML.load(last_response.body)
+        r = api_spec.find { |i| i[:route] == 'GET  /features/route_without_parameters' }
+
+        expect(r).not_to be_nil
+      end
     end
   end
 
@@ -46,16 +55,16 @@ describe "browsable api" do
     let(:format) { "json" }
 
     it "returns the api documentation in json format" do
-      expect(body[3]["route"]).to eq "GET  /features/default"
+      expect(body[4]["route"]).to eq "GET  /features/default"
 
-      expect(body[3]["parameters"][0]).to eq({
+      expect(body[4]["parameters"][0]).to eq({
         "name" => "a",
         "type" => "String",
         "required" => false,
         "default" => "yay"
       })
 
-      expect(body[3]["parameters"][1]).to eq({
+      expect(body[4]["parameters"][1]).to eq({
         "name" => "b",
         "type" => "Integer",
         "required" => false,
@@ -64,7 +73,8 @@ describe "browsable api" do
     end
 
     it "shows 'dynamically generated' for procs" do
-      expect(body[4]["parameters"][0]["default"]).to eq "dynamically generated"
+      expect(body[5]["parameters"][0]["default"]).to eq "dynamically generated"
     end
+
   end
 end

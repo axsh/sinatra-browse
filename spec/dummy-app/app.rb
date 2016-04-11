@@ -39,6 +39,12 @@ class ConditionTestApp < Sinatra::Base
   get '/condition' do
     { res: "no yay"}.to_json
   end
+
+  set(:my_other_condition) { |value| condition { params["value"] == value } }
+  param :value, :String
+  get '/other_condition', my_other_condition: 'hou oet' do
+    { res: "de oeten > all" }.to_json
+  end
 end
 
 class SystemParamApp < Sinatra::Base
@@ -81,6 +87,10 @@ class App < Sinatra::Base
   def self.min_max_test_params(type, min = 10, max = 20)
     param :min_test, type, min: min
     param :max_test, type, max: max
+  end
+
+  get "/features/route_without_parameters" do
+    params.to_json
   end
 
   param :a, :String
@@ -187,6 +197,16 @@ class App < Sinatra::Base
 
   param :error, :Integer, in: 1..9, on_error: proc { halt 200, "we can handle it" }
   get "/features/error_handing" do
+    params.to_json
+  end
+
+  param :with, :String, transform: :upcase
+  param :variables, :Boolean
+  get "/features/working/:with/path/:variables" do
+    params.to_json
+  end
+
+  get "/features/:undefined/path/variables" do
     params.to_json
   end
 end

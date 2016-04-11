@@ -5,9 +5,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+* `Added` It is now possible to use sinatra-browse with named parameters in routes patterns.
+
 * `Added` New parameter types: `Hash`, `Array`, `Any`.
 
 * `Added` Error handling to type coercion. Parameters that fail to be converted to the correct type will return a 400 error with an error hash.
+
+* `Changed` Sinatra-browse now does its work in a condition instead of a before block. This was done to become able to use named parameters in route patterns but also means user defind conditions will be executed before sinatra-browse.
 
 ## [0.6.1] - 2015-07-07
 

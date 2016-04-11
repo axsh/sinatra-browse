@@ -255,7 +255,7 @@ set allowed_undefined_parameters: [ "id", "username", "password" ]
 
 ## Named parameters in route patterns
 
-Unfortunately you are not able to use Sinatra-browse for named parameters in the route definition. Take the following example.
+Since version 0.7,you are able to use named parameters in route patterns. Take the following example.
 
 ```ruby
 get 'foo/:bar' do
@@ -263,6 +263,10 @@ get 'foo/:bar' do
 end
 ```
 
-You will ***not*** be able to define the parameter `bar`. This is because Sinatra-browse does its thing in a before block and these parameters aren't added to the `params` hash until the route itself gets executed.
+If you have sinatra-browse version 0.7 or higher, you will be able to define the variable `bar`.
 
-Some exta discussion of this problem can be found [here](https://github.com/sinatra/sinatra/issues/417).
+## Using conditions
+
+Before version 0.7, sinatra-browse did its work in a before block. This meant that all of its parameter type casting and validation happened before conditions blocks defined in your API.
+
+In version 0.7 and higher, sinatra-browse actually does its work in a new condition that is executed after user defined conditions. Any condition blocks you define, will be execute *before* sinatra-browse and have access to the raw unprocessed `@params` hash. This change was done to become able to use named parameters in route patterns.

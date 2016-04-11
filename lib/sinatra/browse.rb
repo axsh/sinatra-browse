@@ -124,7 +124,6 @@ module Sinatra::Browse
 
   def self.route_added(verb, path, block)
     return if verb == "HEAD" && !@app.settings.show_head_routes
-    return if @app.temp_browse_params.empty?
     browse_route = @app.create_browse_route(verb, path)
 
     # Find the last route and append to conditions.
