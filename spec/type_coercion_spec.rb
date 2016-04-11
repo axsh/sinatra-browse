@@ -9,7 +9,8 @@ describe "type coercion" do
       integer: "1",
       boolean: "false",
       float: "1.5",
-      hash: {joske: :jefke}
+      hash: {joske: :jefke},
+      array: [1, 2, 3]
     )
 
     expect(body['string']).to be_a(String)
@@ -17,6 +18,7 @@ describe "type coercion" do
     expect(body['boolean']).to be_a(FalseClass)
     expect(body['float']).to be_a(Float)
     expect(body['hash']).to be_a(Hash)
+    expect(body['array']).to be_a(Array)
   end
 
   describe "Hash coercion" do
@@ -36,6 +38,24 @@ describe "type coercion" do
         "parameter" => "hash",
         "value" => "screw!",
         "reason" => "Unable to coerce 'screw!' to hash. It does not have a to_hash method."
+      })
+    end
+  end
+
+  describe "Array coercion" do
+    it "accepts array parameters" do
+      get("features/type_coercion", "array[]=foo&array[]=bar")
+      expect(body['array']).to eq(["foo", "bar"])
+    end
+
+    it "returns an error hash and http status 400 for anything else" do
+      get("features/type_coercion", array: "screw!")
+      expect(last_response.status).to eq 400
+      expect(body).to eq({
+        "error" => "parameter validation failed",
+        "parameter" => "array",
+        "value" => "screw!",
+        "reason" => "Unable to coerce 'screw!' to array. It does not have a to_a method."
       })
     end
   end

@@ -54,6 +54,7 @@ At the time of writing these parameter types are available.
 * `:Boolean`
 * `:DateTime`
 * `:Hash`
+* `:Array`
 
 **Remarks:**
 
