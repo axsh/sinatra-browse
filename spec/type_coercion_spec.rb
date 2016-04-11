@@ -9,12 +9,74 @@ describe "type coercion" do
       integer: "1",
       boolean: "false",
       float: "1.5",
+      hash: {joske: :jefke},
+      array: [1, 2, 3]
     )
 
     expect(body['string']).to be_a(String)
     expect(body['integer']).to be_a(Integer)
     expect(body['boolean']).to be_a(FalseClass)
     expect(body['float']).to be_a(Float)
+    expect(body['hash']).to be_a(Hash)
+    expect(body['array']).to be_a(Array)
+  end
+
+  describe "Any coercion" do
+    it "accepts any type of parameter and does not do any type coercion" do
+      get("features/type_coercion", any: "olifant")
+      expect(body["any"]).to eq "olifant"
+
+      get("features/type_coercion", any: 1)
+      expect(body["any"]).to eq "1"
+
+      get("features/type_coercion", any: true)
+      expect(body["any"]).to eq "true"
+
+      get("features/type_coercion", any: {a: :b, c: :d})
+      expect(body["any"]).to eq({"a" => "b", "c" => "d"})
+
+      get("features/type_coercion", any: [1, 2, 3, 4, "hoedje van"])
+      expect(body["any"]).to eq ["1", "2", "3", "4", "hoedje van"]
+    end
+  end
+
+  describe "Hash coercion" do
+    it "accepts hash parameters" do
+      get("features/type_coercion", "hash[t]=t&hash[f]=f")
+      expect(body['hash']).to eq({
+        "t" => "t",
+        "f" => "f"
+      })
+    end
+
+    it "returns an error hash and http status 400 for anything else" do
+      get("features/type_coercion", hash: "screw!")
+      expect(last_response.status).to eq 400
+      expect(body).to eq({
+        "error" => "parameter validation failed",
+        "parameter" => "hash",
+        "value" => "screw!",
+        "reason" => "Unable to coerce 'screw!' to hash. It does not have a to_hash method."
+      })
+    end
+  end
+
+  describe "Array coercion" do
+    it "accepts array parameters" do
+      get("features/type_coercion", "array[]=foo&array[]=bar")
+      expect(body['array']).to eq(["foo", "bar"])
+    end
+
+    it "returns an error hash and http status 400 for anything else" do
+      get("features/type_coercion", array: "screw!")
+      expect(last_response.status).to eq 400
+      expect(body).to eq({
+        "error" => "parameter validation failed",
+        "parameter" => "array",
+        "value" => "screw!",
+        "reason" => "Unable to coerce 'screw!' to array. It does not have a to_a method."
+      })
+    end
   end
 
   describe "DateTime coercion" do
@@ -37,18 +99,31 @@ describe "type coercion" do
   end
 
   describe "Boolean coercion" do
-    ["y", "yes", "t", "true", "1"].each do |i|
+    B = Sinatra::Browse::ParameterTypes::Boolean
+
+    B::TRUE_VALUES.each do |i|
       it "coerces true for '#{i}'" do
         get("features/type_coercion", boolean: i)
         expect(body['boolean']).to be_a(TrueClass)
       end
     end
 
-    ["n", "no", "f", "false", "0"].each do |i|
+    B::FALSE_VALUES.each do |i|
       it "coerces false for '#{i}'" do
         get("features/type_coercion", boolean: i)
         expect(body['boolean']).to be_a(FalseClass)
       end
+    end
+
+    it "returns an error hash and http status 400 for anything else" do
+      get("features/type_coercion", boolean: "far lands or bust")
+      expect(status).to eq 400
+      expect(body).to eq({
+        "error" => "parameter validation failed",
+        "parameter" => "boolean",
+        "value" => "far lands or bust",
+        "reason" => "Not a valid boolean value: 'far lands or bust'. Must be one of the following: #{B::TRUE_VALUES + B::FALSE_VALUES}"
+      })
     end
   end
 end

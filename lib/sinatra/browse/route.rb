@@ -48,7 +48,12 @@ module Sinatra::Browse
           next
         end
 
-        params[name] = pd.coerce(params[name])
+        begin
+          params[name] = pd.coerce(params[name])
+        rescue ArgumentError => e
+          error_hash = pd.build_error_hash(e.message, params[name])
+          return false, error_hash
+        end
 
         success, error_hash = pd.validate(params)
         return false, error_hash unless success
