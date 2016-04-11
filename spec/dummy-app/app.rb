@@ -94,6 +94,7 @@ class App < Sinatra::Base
   param :boolean, :Boolean
   param :float, :Float
   param :date, :DateTime
+  param :hash, :Hash
   get "/features/type_coercion" do
     params.to_json
   end

@@ -23,6 +23,7 @@ module Sinatra::Browse
     require_relative 'browse/parameter_types/boolean'
     require_relative 'browse/parameter_types/date_time'
     require_relative 'browse/parameter_types/float'
+    require_relative 'browse/parameter_types/hash'
     require_relative 'browse/parameter_types/integer'
     require_relative 'browse/parameter_types/string'
   end

@@ -9,12 +9,35 @@ describe "type coercion" do
       integer: "1",
       boolean: "false",
       float: "1.5",
+      hash: {joske: :jefke}
     )
 
     expect(body['string']).to be_a(String)
     expect(body['integer']).to be_a(Integer)
     expect(body['boolean']).to be_a(FalseClass)
     expect(body['float']).to be_a(Float)
+    expect(body['hash']).to be_a(Hash)
+  end
+
+  describe "Hash coercion" do
+    it "accepts hash parameters" do
+      get("features/type_coercion", "hash[t]=t&hash[f]=f")
+      expect(body['hash']).to eq({
+        "t" => "t",
+        "f" => "f"
+      })
+    end
+
+    it "returns an error hash and http status 400 for anything else" do
+      get("features/type_coercion", hash: "screw!")
+      expect(last_response.status).to eq 400
+      expect(body).to eq({
+        "error" => "parameter validation failed",
+        "parameter" => "hash",
+        "value" => "screw!",
+        "reason" => "Unable to coerce 'screw!' to hash. It does not have a to_hash method."
+      })
+    end
   end
 
   describe "DateTime coercion" do
