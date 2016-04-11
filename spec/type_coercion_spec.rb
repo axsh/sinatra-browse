@@ -37,18 +37,31 @@ describe "type coercion" do
   end
 
   describe "Boolean coercion" do
-    ["y", "yes", "t", "true", "1"].each do |i|
+    B = Sinatra::Browse::ParameterTypes::Boolean
+
+    B::TRUE_VALUES.each do |i|
       it "coerces true for '#{i}'" do
         get("features/type_coercion", boolean: i)
         expect(body['boolean']).to be_a(TrueClass)
       end
     end
 
-    ["n", "no", "f", "false", "0"].each do |i|
+    B::FALSE_VALUES.each do |i|
       it "coerces false for '#{i}'" do
         get("features/type_coercion", boolean: i)
         expect(body['boolean']).to be_a(FalseClass)
       end
+    end
+
+    it "returns an error hash and http status 400 for anything else" do
+      get("features/type_coercion", boolean: "far lands or bust")
+      expect(status).to eq 400
+      expect(body).to eq({
+        "error" => "parameter validation failed",
+        "parameter" => "boolean",
+        "value" => "far lands or bust",
+        "reason" => "Not a valid boolean value: 'far lands or bust'. Must be one of the following: #{B::TRUE_VALUES + B::FALSE_VALUES}"
+      })
     end
   end
 end
