@@ -3,6 +3,12 @@
 All notable changes to sinatra-browse will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+* `Added` New parameter types: `Hash`, `Array`, `Any`.
+
+* `Added` Error handling to type coercion. Parameters that fail to be converted to the correct type will return a 400 error with an error hash.
+
 ## [0.6.1] - 2015-07-07
 
 * `Added` Support for Ruby 2.2.2. That means the unit tests are now run on that version. It was probably working already anyway.
@@ -38,8 +44,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.4] - 2014-05-29
 
 * `Added` Implemented two new String validations.
-    - min_length
-    - max_length
+    - min\_length
+    - max\_length
 
 ## [0.3] - 2014-05-08
 
