@@ -9,7 +9,11 @@ describe "overriding parameter options with param_options" do
       expect(status).to eq 400
       get("features/options_override/#{url}", reused: "joske")
       expect(body["reused"]).to eq("joske")
+      get("features/options_override/#{url}?get_original=1", reused: "joske")
+      expect(body["reused"]).to eq("joske")
       get("features/options_override/#{url}", reused: "jefke")
+      expect(body["reused"]).to eq("jefke")
+      get("features/options_override/#{url}?get_original=1", reused: "jefke")
       expect(body["reused"]).to eq("jefke")
     end
   end
@@ -26,6 +30,8 @@ describe "overriding parameter options with param_options" do
     it "has set a default value" do
       get("features/options_override/default_added")
       expect(body["reused"]).to eq("joske")
+      get("features/options_override/default_added?get_original=1")
+      expect(body["reused"]).to be_nil
     end
   end
 

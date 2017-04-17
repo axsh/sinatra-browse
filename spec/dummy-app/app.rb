@@ -117,8 +117,13 @@ class App < Sinatra::Base
   param :format, :String, format: /^nw-[a-z]{1,8}$/ #TODO: Generate examples in docs
   param :min_length, :String, min_length: 5
   param :max_length, :String, max_length: 5
+  param :get_original, :String
   get "/features/string_validation" do
-    params.to_json
+    if params[:get_original]
+      orig_params.to_json
+    else
+      params.to_json
+    end
   end
 
   param :single_digit, :Integer, in: 1..9
@@ -146,24 +151,37 @@ class App < Sinatra::Base
   end
 
   def self.helper_method
+    param :get_original, :String
     param :reused, :String, in: ["joske", "jefke"]
   end
 
   helper_method
   get "/features/options_override/not_overridden" do
-    params.to_json
+    if params["get_original"]
+      orig_params.to_json
+    else
+      params.to_json
+    end
   end
 
   helper_method
   param_options :reused, default: "joske"
   get "/features/options_override/default_added" do
-    params.to_json
+    if params["get_original"]
+      orig_params.to_json
+    else
+      params.to_json
+    end
   end
 
   helper_method
   param_options :reused, in: ["jossefien", "nonkel_jan"]
   get "/features/options_override/in_replaced" do
-    params.to_json
+    if params["get_original"]
+      orig_params.to_json
+    else
+      params.to_json
+    end
   end
 
   param :a, :String, depends_on: :b

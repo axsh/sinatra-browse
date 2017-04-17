@@ -91,6 +91,12 @@ module Sinatra::Browse
     @default_on_error
   end
 
+  module HelperMethods
+    def orig_params
+      @orig_params
+    end
+  end
+
   def self.registered(app)
     @app = app
 
@@ -111,6 +117,11 @@ module Sinatra::Browse
     }
 
     app.default_on_error { |error_hash| _default_on_error(error_hash) }
+
+    app.before do
+      @orig_params = @params.dup.freeze
+    end
+    app.helpers HelperMethods
 
     app.before do
       browse_route = app.browse_routes_for(request.request_method, request.path_info)

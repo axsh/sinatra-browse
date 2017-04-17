@@ -39,6 +39,8 @@ describe "transform" do
   it "does a to_proc on whatever was given and calls it on the parameter" do
     get("features/string_validation", transform: "joske")
     expect(body["transform"]).to eq("JOSKE")
+    get("features/string_validation?get_original=1", transform: "joske")
+    expect(body["transform"]).to eq("joske")
   end
 
   #TODO: Define behaviour for something that doesn't respond to to_proc
