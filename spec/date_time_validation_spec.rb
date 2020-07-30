@@ -17,6 +17,13 @@ describe "DateTime validation" do
     end
   end
 
+  context "with an invalid date" do
+    it "validates the date and returns an error" do
+      get("features/date_time_validation", string_min: "2019/02/29")
+      expect(status).to eq 400
+    end
+  end
+
   [
     [:max, {string_max: '2005-1-1'}],
     [:min, {string_min: '2014-2-4'}]

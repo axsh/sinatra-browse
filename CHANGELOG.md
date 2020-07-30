@@ -3,6 +3,10 @@
 All notable changes to sinatra-browse will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## Next version
+
+* `Changed` Incoercible params, such as an invalid `DateTime` param, will give back a 400 with reason `invalid` instead of raising an exception.
+
 ## [0.6.1] - 2015-07-07
 
 * `Added` Support for Ruby 2.2.2. That means the unit tests are now run on that version. It was probably working already anyway.
