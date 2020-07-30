@@ -48,7 +48,11 @@ module Sinatra::Browse
           next
         end
 
-        params[name] = pd.coerce(params[name])
+        begin
+          params[name] = pd.coerce(params[name])
+        rescue
+          return false, pd.build_error_hash(:invalid, params[name])
+        end
 
         success, error_hash = pd.validate(params)
         return false, error_hash unless success
